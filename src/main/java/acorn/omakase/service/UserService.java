@@ -15,6 +15,7 @@ public class UserService {
 
     public List<User> getUserList() {
         System.out.println("test");
+        System.out.println("test2");
         return userMapper.getUserList();
     }
 
