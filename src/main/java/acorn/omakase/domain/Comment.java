@@ -1,12 +1,11 @@
 package acorn.omakase.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 import java.sql.Date;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment {
     private int comment_no;
     private String comment_content;
@@ -14,4 +13,24 @@ public class Comment {
     private Date comment_date;
     private String user_nickname;
     private int post_no;
+
+    @Builder
+    public Comment(int comment_no, String comment_content, int comment_like_cnt, Date comment_date, String user_nickname, int post_no) {
+        this.comment_no = comment_no;
+        this.comment_content = comment_content;
+        this.comment_like_cnt = comment_like_cnt;
+        this.comment_date = comment_date;
+        this.user_nickname = user_nickname;
+        this.post_no = post_no;
+    }
+
+    public static Comment of(int comment_no, String comment_content, int comment_like_cnt, Date comment_date, String user_nickname, int post_no) {
+        return Comment.builder()
+                .comment_no(comment_no)
+                .comment_content(comment_content)
+                .comment_like_cnt(comment_like_cnt)
+                .user_nickname(user_nickname)
+                .post_no(post_no)
+                .comment_date(comment_date).build();
+    }
 }
