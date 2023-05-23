@@ -4,11 +4,11 @@
 
     <select id="getUserList" resultType="acorn.omakase.domain.User">
         SELECT
-        id
-        ,	login_id
+        *
         FROM
         user
         ORDER by
         id asc
     </select>
+
 </mapper>
