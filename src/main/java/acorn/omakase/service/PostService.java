@@ -1,9 +1,8 @@
 package acorn.omakase.service;
 
 import acorn.omakase.domain.Comment;
-import acorn.omakase.dto.WriteCommentDto;
+import acorn.omakase.dto.postdto.WriteCommentDto;
 import acorn.omakase.repository.PostMapper;
-import ch.qos.logback.core.net.SyslogOutputStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

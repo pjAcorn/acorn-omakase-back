@@ -1,14 +1,12 @@
 package acorn.omakase.controller;
 
-import acorn.omakase.domain.Comment;
-import acorn.omakase.dto.WriteCommentDto;
+import acorn.omakase.dto.postdto.WriteCommentDto;
 import acorn.omakase.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

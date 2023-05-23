@@ -1,18 +1,38 @@
 package acorn.omakase.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import acorn.omakase.dto.userdto.SignupRequest;
+import lombok.*;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
     private Long userId;
     private String loginId;
-    private String userName;
-    private String userPw;
-    private String userEmail;
-    private String userRegion;
-    private String userNickName;
+    private String name;
+    private String password;
+    private String email;
+    private String region;
+    private String nickname;
 
+    @Builder
+    public User(String loginId, String name, String password, String email, String region, String nickname) {
+
+        this.loginId = loginId;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.region = region;
+        this.nickname = nickname;
+    }
+
+    public static User of(SignupRequest signupRequest) {
+        return User.builder()
+                .loginId(signupRequest.getLoginId())
+                .nickname(signupRequest.getNickname())
+                .password(signupRequest.getPassword())
+                .email(signupRequest.getEmail())
+                .name(signupRequest.getName())
+                .region(signupRequest.getRegion()).build();
+    }
 }
