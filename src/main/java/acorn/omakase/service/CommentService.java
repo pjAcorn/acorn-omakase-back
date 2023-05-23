@@ -21,7 +21,7 @@ public class CommentService {
         commentMapper.insertComment(toComment);
     }
 
-    public void likeComment(int comment_no) {
+    public void likeComment(Object comment_no) {
         commentMapper.updateLike(comment_no);
     }
 
@@ -32,11 +32,11 @@ public class CommentService {
         commentMapper.updateComment(toComment);
     }
 
-    public void delComment(int comment_no) {
+    public void delComment(Object comment_no) {
         commentMapper.deleteComment(comment_no);
     }
 
-    public List boardComment(int post_no) {
+    public List<Comment> viewComment(Object post_no) {
         return commentMapper.selectCommentList(post_no);
     }
 }

@@ -9,11 +9,11 @@ import java.util.List;
 public interface CommentMapper {
     void insertComment(Comment toComment);
 
-    void updateLike(int comment_no);
+    void updateLike(Object comment_no);
 
     void updateComment(Comment toComment);
 
-    void deleteComment(int comment_no);
+    void deleteComment(Object comment_no);
 
-    List selectCommentList(int post_no);
+    List<Comment> selectCommentList(Object post_no);
 }

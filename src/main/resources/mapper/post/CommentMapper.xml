@@ -9,7 +9,7 @@
         update omakase.comment set comment_like_cnt = comment_like_cnt+1 where comment_no = #{comment_no}
     </update>
 
-    <update id="updateComment" parameterType="Comment">
+    <update id="updateComment" parameterType="acorn.omakase.domain.Comment">
         update omakase.comment set comment_content = #{comment_content} where comment_no = #{comment_no}
     </update>
 
@@ -17,7 +17,7 @@
         delete from omakase.comment where comment_no = #{comment_no}
     </delete>
 
-    <select id="selectCommentList" resultType="String" parameterType="int">
+    <select id="selectCommentList" resultType="map" parameterType="int">
         select * from omakase.comment where post_no = #{post_no} order by comment_date asc
     </select>
 </mapper>
