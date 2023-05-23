@@ -34,7 +34,7 @@ public class PostController {
 //        commentMap.put("user_nickname",comment.getUser_nickname());
 //        commentMap.put("post_no",comment.getPost_no());
 
-        int i = postService.addComment(commentDto);
+        postService.addComment(commentDto)
 
         return new ResponseEntity(HttpStatus.OK);
     }
