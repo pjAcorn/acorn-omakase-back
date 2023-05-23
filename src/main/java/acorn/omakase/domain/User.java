@@ -7,7 +7,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public class User {
 
-    private Long id;
+    private Long userId;
     private String loginId;
+    private String userName;
+    private String userPw;
+    private String userEmail;
+    private String userRegion;
+    private String userNickName;
 
 }
