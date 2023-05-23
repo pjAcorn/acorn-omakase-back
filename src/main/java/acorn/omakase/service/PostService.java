@@ -1,6 +1,7 @@
 package acorn.omakase.service;
 
 import acorn.omakase.domain.Comment;
+import acorn.omakase.dto.WriteCommentDto;
 import acorn.omakase.repository.PostMapper;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +15,14 @@ import java.util.Map;
 public class PostService {
     private final PostMapper postMapper;
 
-    public int addComment(Map commentMap) {
+    public int addComment(WriteCommentDto commentDto) {
         int comment_no = selectCommentNo();
-        commentMap.put("comment_no", comment_no);
 
-        return postMapper.insertComment(commentMap);
+        Comment toComment = Comment.of(commentDto.getComment_no(), commentDto.getUser_nickname(), commentDto.getComment_like_cnt()
+                , commentDto.getComment_date(), commentDto.getUser_nickname(), commentDto.getPost_no());
+//        commentMap.put("comment_no", comment_no);
+
+        return postMapper.insertComment(toComment);
     }
 
     private int selectCommentNo() {

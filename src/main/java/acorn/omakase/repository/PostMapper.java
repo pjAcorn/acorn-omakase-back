@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Mapper
 public interface PostMapper {
-    int insertComment(Map commentMap);
+    int insertComment(Comment commentMap);
 
     int selectCommentNo();
 

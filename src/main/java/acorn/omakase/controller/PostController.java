@@ -1,8 +1,11 @@
 package acorn.omakase.controller;
 
 import acorn.omakase.domain.Comment;
+import acorn.omakase.dto.WriteCommentDto;
 import acorn.omakase.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -12,27 +15,28 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/community")
+@RequestMapping("/comment")
 public class PostController {
     private final PostService postService;
 
-//    새 댓글 쓰기
-    @RequestMapping("/new_comment")
-    public int addComment(){
-        Map commentMap = new HashMap();
 
-        commentMap.put("comment_content","저장테스트(원래는 본문에서 Comment 받아와야함)");
-        commentMap.put("user_nickname","테스트");
-        commentMap.put("post_no",1);
+//    새 댓글 쓰기
+    @PostMapping("/write/new")
+    public ResponseEntity addComment(@RequestBody WriteCommentDto commentDto){
+//        Map commentMap = new HashMap();
+//
+//        commentMap.put("comment_content","저장테스트(원래는 본문에서 Comment 받아와야함)");
+//        commentMap.put("user_nickname","테스트");
+//        commentMap.put("post_no",1);
 
         // @modelattribute Comment comment
 //        commentMap.put("comment_content",comment.getComment_content());
 //        commentMap.put("user_nickname",comment.getUser_nickname());
 //        commentMap.put("post_no",comment.getPost_no());
 
-        int result = postService.addComment(commentMap);
+        int i = postService.addComment(commentDto);
 
-        return result;
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 //    댓글 좋아요
