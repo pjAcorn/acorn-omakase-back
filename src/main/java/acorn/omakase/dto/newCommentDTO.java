@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.sql.Date;
 
 @Setter @Getter
-public class WriteCommentDto {
+public class newCommentDTO {
 
     private int comment_no;
     private String comment_content;
