@@ -1,6 +1,7 @@
 package acorn.omakase.controller;
 
 import acorn.omakase.domain.User;
+import acorn.omakase.dto.userdto.LoginRequest;
 import acorn.omakase.dto.userdto.SignupRequest;
 import acorn.omakase.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,15 @@ public class UserController {
         userService.signup(signupRequest);
 
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody LoginRequest loginRequest){
+        int loginOk = userService.login(loginRequest);
+        if(loginOk == 1){
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.OK);
+        }
     }
 }
