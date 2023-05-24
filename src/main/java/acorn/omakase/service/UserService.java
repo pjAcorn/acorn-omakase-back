@@ -1,6 +1,8 @@
 package acorn.omakase.service;
 
+import acorn.omakase.domain.Login;
 import acorn.omakase.domain.User;
+import acorn.omakase.dto.userdto.LoginRequest;
 import acorn.omakase.dto.userdto.SignupRequest;
 import acorn.omakase.repository.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +26,11 @@ public class UserService {
         User user = User.of(signupRequest);
         userMapper.signup(user);
 
+    }
+
+    public int login(LoginRequest loginRequest) {
+        Login login = Login.of(loginRequest);
+
+        return userMapper.login(login);
     }
 }
