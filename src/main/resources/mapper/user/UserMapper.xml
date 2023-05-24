@@ -11,4 +11,10 @@
         ORDER by
         id asc
     </select>
+
+    <insert id="signup" parameterType="acorn.omakase.domain.User" useGeneratedKeys="true"
+            keyProperty="userId" keyColumn="user_id">
+        INSERT INTO USER (login_id, name, password, email, region, nickname)
+        VALUES (#{loginId}, #{name}, #{password}, #{email}, #{region}, #{nickname})
+    </insert>
 </mapper>
