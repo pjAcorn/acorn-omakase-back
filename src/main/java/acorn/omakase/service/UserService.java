@@ -1,6 +1,5 @@
 package acorn.omakase.service;
 
-import acorn.omakase.domain.Login;
 import acorn.omakase.domain.User;
 import acorn.omakase.dto.userdto.FindIdRequest;
 import acorn.omakase.dto.userdto.LoginRequest;
@@ -38,9 +37,11 @@ public class UserService {
         return id;
     }
 
-    public int login(LoginRequest loginRequest) {
-        Login login = Login.of(loginRequest);
-
-        return userMapper.login(login);
+    public User login(LoginRequest loginRequest) throws Exception {
+        User userId = userMapper.login(loginRequest);
+        if(userId==null){
+             throw new Exception("아이디/비밀번호가 일치하지 않습니다.");
+        }
+        return userId;
     }
 }

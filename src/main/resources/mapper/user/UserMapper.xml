@@ -18,12 +18,12 @@
         VALUES (#{loginId}, #{name}, #{password}, #{email}, #{region}, #{nickname})
     </insert>
 
-
     <select id="findid" parameterType="acorn.omakase.domain.User" resultType="String">
         SELECT login_id FROM USER WHERE name=#{name} and email=#{email}
     </select>
-    <select id="login" parameterType="acorn.omakase.domain.Login" resultType="int">
-        SELECT COUNT(*)
+  
+    <select id="login" parameterType="acorn.omakase.domain.User" resultType="acorn.omakase.domain.User">
+        SELECT *
         FROM USER
         WHERE login_id = #{loginId} AND password = #{password}
     </select>

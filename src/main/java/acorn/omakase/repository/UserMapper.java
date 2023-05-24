@@ -1,7 +1,7 @@
 package acorn.omakase.repository;
 
-import acorn.omakase.domain.Login;
 import acorn.omakase.domain.User;
+import acorn.omakase.dto.userdto.LoginRequest;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -13,8 +13,7 @@ public interface UserMapper {
 
     void signup(User user);
 
+    User login(LoginRequest loginRequest);
+
     String findid(User findid);
-
-    int login(Login login);
-
 }
