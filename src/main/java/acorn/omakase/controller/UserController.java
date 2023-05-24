@@ -32,12 +32,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequest loginRequest){
-        int loginOk = userService.login(loginRequest);
-        if(loginOk == 1){
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.OK);
-        }
+    public ResponseEntity login(@RequestBody LoginRequest loginRequest) throws Exception {
+        User userId = userService.login(loginRequest);
+
+        return new ResponseEntity(userId, HttpStatus.OK);
     }
 }
