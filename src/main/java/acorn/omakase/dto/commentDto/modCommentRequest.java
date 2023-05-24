@@ -3,11 +3,8 @@ package acorn.omakase.dto.commentDto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Date;
-
 @Setter @Getter
-public class newCommentRequest {
+public class modCommentRequest {
+    private Long commentId;
     private String content;
-    private String nickname;
-    private Long postId;
 }

@@ -1,7 +1,7 @@
 package acorn.omakase.controller;
 
 import acorn.omakase.domain.Comment;
-import acorn.omakase.dto.commentDto.modCommentDTO;
+import acorn.omakase.dto.commentDto.modCommentRequest;
 import acorn.omakase.dto.commentDto.newCommentRequest;
 import acorn.omakase.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -28,15 +28,15 @@ public class CommentController {
 
 //    댓글 좋아요
     @PatchMapping("/like_comment")
-    public ResponseEntity likeComment(@RequestBody Object comment_no){
-        commentService.likeComment(comment_no);
+    public ResponseEntity likeComment(@RequestBody Object commentId){
+        commentService.likeComment(commentId);
 
         return new ResponseEntity(HttpStatus.OK);
     }
 
 //    댓글 수정
     @PatchMapping("/mod_comment")
-    public ResponseEntity modComment(@RequestBody modCommentDTO comment){
+    public ResponseEntity modComment(@RequestBody modCommentRequest comment){
 
         commentService.modComment(comment);
 
@@ -45,16 +45,16 @@ public class CommentController {
 
 //    댓글 삭제
     @DeleteMapping("/del_comment")
-    public ResponseEntity delComment(@RequestBody Object comment_no){
-        commentService.delComment(comment_no);
+    public ResponseEntity delComment(@RequestBody Object commentId){
+        commentService.delComment(commentId);
 
         return new ResponseEntity(HttpStatus.OK);
     }
 
 //    댓글 보기(post 보는 메서드에 이거 넣으면 될 듯? 겟매핑은 post에서 해줘야 함)
     @GetMapping("/view_comment")
-    public ResponseEntity viewComment(@RequestBody Object post_no){
-        List<Comment> commentList = commentService.viewComment(post_no);
+    public ResponseEntity viewComment(@RequestBody Object postId){
+        List<Comment> commentList = commentService.viewComment(postId);
 
         return new ResponseEntity(commentList, HttpStatus.OK);
     }
