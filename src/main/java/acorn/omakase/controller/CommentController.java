@@ -1,8 +1,8 @@
 package acorn.omakase.controller;
 
 import acorn.omakase.domain.Comment;
-import acorn.omakase.dto.modCommentDTO;
-import acorn.omakase.dto.newCommentDTO;
+import acorn.omakase.dto.commentDto.modCommentDTO;
+import acorn.omakase.dto.commentDto.newCommentRequest;
 import acorn.omakase.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class CommentController {
 
 //    새 댓글 쓰기
     @PostMapping("/new_comment")
-    public ResponseEntity newComment(@RequestBody newCommentDTO comment){
+    public ResponseEntity newComment(@RequestBody newCommentRequest comment){
 
         commentService.newComment(comment);
 

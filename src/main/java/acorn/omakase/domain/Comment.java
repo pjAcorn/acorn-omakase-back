@@ -7,30 +7,27 @@ import java.sql.Date;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment {
-    private int comment_no;
-    private String comment_content;
-    private int comment_like_cnt;
-    private Date comment_date;
-    private String user_nickname;
-    private int post_no;
+    private Long commentId;
+    private String content;
+    private Long like;
+    private Date createdAt;
+    private String nickname;
+    private Long postId;
 
     @Builder
-    public Comment(int comment_no, String comment_content, int comment_like_cnt, Date comment_date, String user_nickname, int post_no) {
-        this.comment_no = comment_no;
-        this.comment_content = comment_content;
-        this.comment_like_cnt = comment_like_cnt;
-        this.comment_date = comment_date;
-        this.user_nickname = user_nickname;
-        this.post_no = post_no;
+    public Comment(Long commentId, String content, Long like, Date createdAt, String nickname, Long postId) {
+        this.commentId = commentId;
+        this.content = content;
+        this.like = like;
+        this.createdAt = createdAt;
+        this.nickname = nickname;
+        this.postId = postId;
     }
 
-    public static Comment of(int comment_no, String comment_content, int comment_like_cnt, Date comment_date, String user_nickname, int post_no) {
+    public static Comment of(String content, String nickname, Long postId) {
         return Comment.builder()
-                .comment_no(comment_no)
-                .comment_content(comment_content)
-                .comment_like_cnt(comment_like_cnt)
-                .comment_date(comment_date)
-                .user_nickname(user_nickname)
-                .post_no(post_no).build();
+                .content(content)
+                .nickname(nickname)
+                .postId(postId).build();
     }
 }
