@@ -1,7 +1,8 @@
 spring:
   datasource:
     username: root
-    password: Whrjsgml199#
+    password: 1234
+
     mapper-locations: classpath:/mapper/**/*.xml
     jdbc-url: jdbc:mysql://localhost:3306/omakase?&serverTimezone=UTC&autoReconnect=true&allowMultiQueries=true&characterEncoding=UTF-8
     driver: com.mysql.cj.jdbc.Driver
