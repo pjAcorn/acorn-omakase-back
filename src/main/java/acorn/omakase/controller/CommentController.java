@@ -51,8 +51,7 @@ public class CommentController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-//    댓글 보기(post 보는 메서드에 이거 넣으면 될 듯? 겟매핑은 post에서 해줘야 함)
-    @GetMapping("/view_comment")
+//    댓글 보기(post에 매핑해놓음)
     public ResponseEntity viewComment(@RequestBody Object postId){
         List<Comment> commentList = commentService.viewComment(postId);
 

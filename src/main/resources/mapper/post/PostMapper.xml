@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="acorn.omakase.repository.PostMapper">
+    <insert id="insertPost" parameterType="acorn.omakase.domain.Post">
+        insert into omakase.post(title, content, nickname, category) values(#{title}, #{content}, #{nickname}, #{category})
+    </insert>
 
+    <update id="updatePost" parameterType="acorn.omakase.domain.Post">
+        update omakase.post set title = #{title}, content = #{content}, category = #{category} where postId = #{postId}
+    </update>
+
+    <delete id="deletePost" parameterType="int">
+        delete from omakase.post where postId = #{postId}
+    </delete>
+
+    <select id="selectPostView" parameterType="int" resultType="map">
+        select * from omakase.post where postId = #{postId}
+    </select>
+
+    <select id="selectPostList" resultType="map">
+        select * from omakase.post order by createdAt desc
+    </select>
+
+    <select id="selectCategoryPostList" resultType="map" parameterType="String">
+        select * from omakase.post where category = #{category} order by createdAt desc
+    </select>
 </mapper>

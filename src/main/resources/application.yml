@@ -1,7 +1,7 @@
 spring:
   datasource:
     username: root
-    password: 1234
+    password: mysql
 
     mapper-locations: classpath:/mapper/**/*.xml
     jdbc-url: jdbc:mysql://localhost:3306/omakase?&serverTimezone=UTC&autoReconnect=true&allowMultiQueries=true&characterEncoding=UTF-8
