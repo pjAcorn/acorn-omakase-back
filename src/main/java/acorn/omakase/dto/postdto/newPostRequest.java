@@ -1,4 +1,4 @@
-package acorn.omakase.dto.commentDto;
+package acorn.omakase.dto.postdto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,8 +6,9 @@ import lombok.Setter;
 import java.sql.Date;
 
 @Setter @Getter
-public class newCommentRequest {
+public class newPostRequest {
+    private String title;
     private String content;
     private String nickname;
-    private Long postId;
+    private String category;
 }

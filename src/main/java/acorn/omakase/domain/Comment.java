@@ -9,25 +9,32 @@ import java.sql.Date;
 public class Comment {
     private Long commentId;
     private String content;
-    private Long like;
+    private Long likes;
     private Date createdAt;
     private String nickname;
     private Long postId;
 
     @Builder
-    public Comment(Long commentId, String content, Long like, Date createdAt, String nickname, Long postId) {
+    public Comment(Long commentId, String content, Long likes, Date createdAt, String nickname, Long postId) {
         this.commentId = commentId;
         this.content = content;
-        this.like = like;
+        this.likes = likes;
         this.createdAt = createdAt;
         this.nickname = nickname;
         this.postId = postId;
     }
 
-    public static Comment of(String content, String nickname, Long postId) {
+    public static Comment ofNew(String content, String nickname, Long postId) {
         return Comment.builder()
                 .content(content)
                 .nickname(nickname)
                 .postId(postId).build();
     }
+
+    public static Comment ofMod(Long commentId, String content) {
+        return Comment.builder()
+                .commentId(commentId)
+                .content(content).build();
+    }
+    
 }
