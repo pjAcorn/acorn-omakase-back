@@ -14,4 +14,6 @@ public interface UserMapper {
     void signup(User user);
 
     User login(LoginRequest loginRequest);
+
+    String findid(User findid);
 }
