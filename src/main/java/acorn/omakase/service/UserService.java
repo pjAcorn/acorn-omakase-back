@@ -1,7 +1,7 @@
 package acorn.omakase.service;
 
-import acorn.omakase.domain.Login;
 import acorn.omakase.domain.User;
+import acorn.omakase.dto.userdto.FindIdRequest;
 import acorn.omakase.dto.userdto.LoginRequest;
 import acorn.omakase.dto.userdto.SignupRequest;
 import acorn.omakase.repository.UserMapper;
@@ -25,12 +25,23 @@ public class UserService {
 
         User user = User.of(signupRequest);
         userMapper.signup(user);
-
     }
 
-    public int login(LoginRequest loginRequest) {
-        Login login = Login.of(loginRequest);
+    // 아이디 찾기
+    public String findId(FindIdRequest findIdRequest){
+        User findId = User.of(findIdRequest);
+        String id = userMapper.findid(findId);
+        if(id== null){
+            throw new IllegalStateException("찾는 아이디가 없습니다.");
+        }
+        return id;
+    }
 
-        return userMapper.login(login);
+    public User login(LoginRequest loginRequest) throws Exception {
+        User userId = userMapper.login(loginRequest);
+        if(userId==null){
+             throw new Exception("아이디/비밀번호가 일치하지 않습니다.");
+        }
+        return userId;
     }
 }
