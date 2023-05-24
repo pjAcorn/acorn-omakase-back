@@ -1,4 +1,4 @@
-package acorn.omakase.dto;
+package acorn.omakase.dto.commentDto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.sql.Date;
 
 @Setter @Getter
-public class newCommentDTO {
+public class modCommentDTO {
 
     private int comment_no;
     private String comment_content;

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface CommentMapper {
-    void insertComment(Comment toComment);
+    void insertComment(Comment comment);
 
     void updateLike(Object comment_no);
 
