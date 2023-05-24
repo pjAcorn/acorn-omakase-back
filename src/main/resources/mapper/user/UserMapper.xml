@@ -17,4 +17,8 @@
         INSERT INTO USER (login_id, name, password, email, region, nickname)
         VALUES (#{loginId}, #{name}, #{password}, #{email}, #{region}, #{nickname})
     </insert>
+
+    <select id="findid" parameterType="acorn.omakase.domain.User" resultType="String">
+        SELECT login_id FROM USER WHERE name=#{name} and email=#{email}
+    </select>
 </mapper>
