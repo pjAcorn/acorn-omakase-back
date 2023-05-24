@@ -29,8 +29,8 @@ public class Comment {
                 .comment_no(comment_no)
                 .comment_content(comment_content)
                 .comment_like_cnt(comment_like_cnt)
+                .comment_date(comment_date)
                 .user_nickname(user_nickname)
-                .post_no(post_no)
-                .comment_date(comment_date).build();
+                .post_no(post_no).build();
     }
 }

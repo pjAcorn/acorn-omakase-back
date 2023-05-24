@@ -1,5 +1,6 @@
 package acorn.omakase.controller;
 
+
 import acorn.omakase.dto.postdto.WriteCommentDto;
 import acorn.omakase.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -82,7 +83,5 @@ public class PostController {
         int post_no = 1;
 
         List commentList = postService.boardComment(post_no);
-
-        return commentList;
     }
 }
