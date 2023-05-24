@@ -1,5 +1,6 @@
 package acorn.omakase.domain;
 
+import acorn.omakase.dto.userdto.FindIdRequest;
 import acorn.omakase.dto.userdto.SignupRequest;
 import lombok.*;
 
@@ -35,4 +36,12 @@ public class User {
                 .name(signupRequest.getName())
                 .region(signupRequest.getRegion()).build();
     }
+
+    public static User of(FindIdRequest findIdRequest) {
+        return User.builder()
+                .loginId(findIdRequest.getLoginId())
+                .email(findIdRequest.getEmail())
+                .name(findIdRequest.getName()).build();
+    }
+
 }

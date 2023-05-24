@@ -1,6 +1,7 @@
 package acorn.omakase.controller;
 
 import acorn.omakase.domain.User;
+import acorn.omakase.dto.userdto.FindIdRequest;
 import acorn.omakase.dto.userdto.LoginRequest;
 import acorn.omakase.dto.userdto.SignupRequest;
 import acorn.omakase.service.UserService;
@@ -31,6 +32,15 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    // 아이디 찾기
+    @PostMapping("/findid")
+    public ResponseEntity findId(@RequestBody FindIdRequest findIdRequest){
+            String id = userService.findId(findIdRequest);
+
+            return new ResponseEntity(id, HttpStatus.OK);
+    }
+}
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequest loginRequest){
         int loginOk = userService.login(loginRequest);
@@ -41,3 +51,4 @@ public class UserController {
         }
     }
 }
+

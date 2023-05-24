@@ -13,5 +13,8 @@ public interface UserMapper {
 
     void signup(User user);
 
+    String findid(User findid);
+
     int login(Login login);
+
 }
