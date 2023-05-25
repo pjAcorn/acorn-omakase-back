@@ -6,10 +6,12 @@ import acorn.omakase.dto.userdto.LoginRequest;
 import acorn.omakase.dto.userdto.SignupRequest;
 import acorn.omakase.repository.UserMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -34,6 +36,7 @@ public class UserService {
         if(id== null){
             throw new IllegalStateException("찾는 아이디가 없습니다.");
         }
+        log.info("test");
         return id;
     }
 

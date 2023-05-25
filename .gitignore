@@ -38,4 +38,5 @@ out/
 src/main/resources/application.yml
 
 *.yml
+application.yml
 application.properties
