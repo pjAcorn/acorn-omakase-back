@@ -39,7 +39,7 @@ public class UserController {
 
             return new ResponseEntity(id, HttpStatus.OK);
     }
-}
+
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequest loginRequest) throws Exception {
