@@ -3,13 +3,8 @@
 <mapper namespace="acorn.omakase.repository.UserMapper">
 
     <select id="getUserList" resultType="acorn.omakase.domain.User">
-        SELECT
-        id
-        ,	login_id
-        FROM
-        user
-        ORDER by
-        id asc
+        SELECT * FROM user
+        ORDER by id asc
     </select>
 
     <insert id="signup" parameterType="acorn.omakase.domain.User" useGeneratedKeys="true"
