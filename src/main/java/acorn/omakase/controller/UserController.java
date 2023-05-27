@@ -8,6 +8,7 @@ import acorn.omakase.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
+@Transactional
 public class UserController {
 
     private final UserService userService;
@@ -33,7 +35,7 @@ public class UserController {
     }
 
     // 아이디 찾기
-    @PostMapping("/findid")
+    @PostMapping("/find/id")
     public ResponseEntity findId(@RequestBody FindIdRequest findIdRequest){
             String id = userService.findId(findIdRequest);
 
@@ -47,5 +49,6 @@ public class UserController {
 
         return new ResponseEntity(userId, HttpStatus.OK);
     }
+
 }
 

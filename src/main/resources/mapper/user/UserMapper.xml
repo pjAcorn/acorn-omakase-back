@@ -4,7 +4,7 @@
 
     <select id="getUserList" resultType="acorn.omakase.domain.User">
         SELECT * FROM user
-        ORDER by id asc
+        ORDER by name asc
     </select>
 
     <insert id="signup" parameterType="acorn.omakase.domain.User" useGeneratedKeys="true"

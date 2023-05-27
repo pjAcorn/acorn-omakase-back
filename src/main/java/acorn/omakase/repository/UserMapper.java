@@ -15,5 +15,7 @@ public interface UserMapper {
 
     User login(LoginRequest loginRequest);
 
-    String findid(User findid);
+    String findId(User findId);
+
+
 }
