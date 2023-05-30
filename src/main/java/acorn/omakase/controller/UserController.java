@@ -1,11 +1,13 @@
 package acorn.omakase.controller;
 
 import acorn.omakase.domain.User;
+import acorn.omakase.dto.userdto.DeleteIdRequest;
 import acorn.omakase.dto.userdto.FindIdRequest;
 import acorn.omakase.dto.userdto.LoginRequest;
 import acorn.omakase.dto.userdto.SignupRequest;
 import acorn.omakase.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +50,14 @@ public class UserController {
         User userId = userService.login(loginRequest);
 
         return new ResponseEntity(userId, HttpStatus.OK);
+    }
+
+
+    // 회원탈퇴
+    @PostMapping("/delete")
+    public ResponseEntity delete(@RequestBody DeleteIdRequest deleteIdRequest){
+        userService.delete(deleteIdRequest);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 }
