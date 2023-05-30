@@ -1,9 +1,12 @@
 package acorn.omakase.repository;
 
-import acorn.omakase.domain.Login;
 import acorn.omakase.domain.User;
+
 import acorn.omakase.dto.userdto.DeleteIdRequest;
 import acorn.omakase.dto.userdto.FindIdRequest;
+
+import acorn.omakase.dto.userdto.LoginRequest;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -15,9 +18,11 @@ public interface UserMapper {
 
     void signup(User user);
 
+
     String findId(FindIdRequest findid);
 
-    int login(Login login);
+    User login(LoginRequest loginRequest);
+
 
     // 회원 탈퇴
     int deleteId(Long userId);

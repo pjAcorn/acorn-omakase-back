@@ -3,13 +3,8 @@
 <mapper namespace="acorn.omakase.repository.UserMapper">
 
     <select id="getUserList" resultType="acorn.omakase.domain.User">
-        SELECT
-        id
-        ,	login_id
-        FROM
-        user
-        ORDER by
-        id asc
+        SELECT * FROM user
+        ORDER by name asc
     </select>
 
     <insert id="signup" parameterType="acorn.omakase.domain.User" useGeneratedKeys="true"
@@ -18,11 +13,12 @@
         VALUES (#{loginId}, #{name}, #{password}, #{email}, #{region}, #{nickname})
     </insert>
 
-    <select id="findId" parameterType="acorn.omakase.domain.User" resultType="String">
+
+    <select id="findid" parameterType="acorn.omakase.domain.User" resultType="String">
         SELECT login_id FROM USER WHERE name=#{name} and email=#{email}
     </select>
-
-    <select id="login" parameterType="acorn.omakase.domain.Login" resultType="int">
+  
+    <select id="login" parameterType="acorn.omakase.domain.User" resultType="acorn.omakase.domain.User">
         SELECT COUNT(*)
         FROM USER
         WHERE login_id = #{loginId} AND password = #{password}

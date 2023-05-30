@@ -1,18 +1,21 @@
 package acorn.omakase.service;
 
-import acorn.omakase.domain.Login;
 import acorn.omakase.domain.User;
 import acorn.omakase.dto.userdto.DeleteIdRequest;
 import acorn.omakase.dto.userdto.FindIdRequest;
+import acorn.omakase.dto.userdto.HomeResponse;
 import acorn.omakase.dto.userdto.LoginRequest;
 import acorn.omakase.dto.userdto.SignupRequest;
 import acorn.omakase.repository.UserMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.annotations.Delete;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -32,18 +35,27 @@ public class UserService {
 
     // 아이디 찾기
     public String findId(FindIdRequest findIdRequest){
+
         String id = userMapper.findId(findIdRequest);
+
+        User findId = User.of(findIdRequest);
+       
+
         if(id== null){
             throw new IllegalStateException("찾는 아이디가 없습니다.");
         }
+        log.info("test");
         return id;
     }
 
-    public int login(LoginRequest loginRequest) {
-        Login login = Login.of(loginRequest);
-
-        return userMapper.login(login);
+    public User login(LoginRequest loginRequest) throws Exception {
+        User userId = userMapper.login(loginRequest);
+        if(userId==null){
+             throw new Exception("아이디/비밀번호가 일치하지 않습니다.");
+        }
+        return userId;
     }
+
 
     // 회원 탈퇴
     public void delete(DeleteIdRequest deleteIdRequest){
@@ -66,4 +78,5 @@ public class UserService {
              throw new IllegalStateException("입력한 두 비밀번호가 일치하지 않습니다.");
         }
     }
+
 }

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
+@Transactional
 public class UserController {
 
     private final UserService userService;
@@ -42,15 +44,14 @@ public class UserController {
             return new ResponseEntity(id, HttpStatus.OK);
     }
 
+
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequest loginRequest){
-        int loginOk = userService.login(loginRequest);
-        if(loginOk == 1){
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.OK);
-        }
+    public ResponseEntity login(@RequestBody LoginRequest loginRequest) throws Exception {
+        User userId = userService.login(loginRequest);
+
+        return new ResponseEntity(userId, HttpStatus.OK);
     }
+
 
     // 회원탈퇴
     @PostMapping("/delete")
@@ -58,5 +59,6 @@ public class UserController {
         userService.delete(deleteIdRequest);
         return new ResponseEntity(HttpStatus.OK);
     }
+
 }
 

@@ -1,7 +1,7 @@
 package acorn.omakase.service;
 
 import acorn.omakase.domain.Comment;
-import acorn.omakase.dto.commentDto.modCommentDTO;
+import acorn.omakase.dto.commentDto.modCommentRequest;
 import acorn.omakase.dto.commentDto.newCommentRequest;
 import acorn.omakase.repository.CommentMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,14 +17,15 @@ public class CommentService {
     private final CommentMapper commentMapper;
 
     public void newComment(newCommentRequest comment) {
-        Comment saveComment = Comment.of(comment.getContent(), comment.getNickname(), comment.getPostId());
+        Comment saveComment = Comment.ofNew(comment.getContent(), comment.getNickname(), comment.getPostId());
 
         commentMapper.insertComment(saveComment);
     }
 
-    public void likeComment(Object comment_no) {
-        commentMapper.updateLike(comment_no);
+    public void likeComment(Object commentId) {
+        commentMapper.updateLike(commentId);
     }
+
 
     /*public void modComment(modCommentDTO comment) {
         Comment toComment = Comment.of(comment.getComment_no(), comment.getComment_content(), comment.getComment_like_cnt()
@@ -33,11 +34,18 @@ public class CommentService {
         commentMapper.updateComment(toComment);
     }*/
 
-    public void delComment(Object comment_no) {
-        commentMapper.deleteComment(comment_no);
+    public void modComment(modCommentRequest comment) {
+        Comment modComment = Comment.ofMod(comment.getCommentId(), comment.getContent());
+
+        commentMapper.updateComment(modComment);
     }
 
-    public List<Comment> viewComment(Object post_no) {
-        return commentMapper.selectCommentList(post_no);
+
+    public void delComment(Object commentId) {
+        commentMapper.deleteComment(commentId);
+    }
+
+    public List<Comment> viewComment(Object postId) {
+        return commentMapper.selectCommentList(postId);
     }
 }

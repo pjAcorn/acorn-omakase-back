@@ -7,13 +7,13 @@ import java.util.List;
 
 @Mapper
 public interface CommentMapper {
-    void insertComment(Comment comment);
+    void insertComment(Comment savecomment);
 
-    void updateLike(Object comment_no);
+    void updateLike(Object commentId);
 
-    void updateComment(Comment toComment);
+    void updateComment(Comment modComment);
 
-    void deleteComment(Object comment_no);
+    void deleteComment(Object commentId);
 
-    List<Comment> selectCommentList(Object post_no);
+    List<Comment> selectCommentList(Object postId);
 }

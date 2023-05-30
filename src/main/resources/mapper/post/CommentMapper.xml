@@ -2,22 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="acorn.omakase.repository.CommentMapper">
     <insert id="insertComment" parameterType="acorn.omakase.domain.Comment">
-        insert into omakase.comment(comment_content, user_nickname, post_no) values(#{comment_content}, #{user_nickname}, #{post_no})
+        insert into omakase.comment(content, nickname, postId) values(#{content}, #{nickname}, #{postId})
     </insert>
 
     <update id="updateLike" parameterType="int">
-        update omakase.comment set comment_like_cnt = comment_like_cnt+1 where comment_no = #{comment_no}
+        update omakase.comment set likes = likes+1 where commentId = #{commentId}
     </update>
 
     <update id="updateComment" parameterType="acorn.omakase.domain.Comment">
-        update omakase.comment set comment_content = #{comment_content} where comment_no = #{comment_no}
+        update omakase.comment set content = #{content} where commentId = #{commentId}
     </update>
 
     <delete id="deleteComment" parameterType="int">
-        delete from omakase.comment where comment_no = #{comment_no}
+        delete from omakase.comment where commentId = #{commentId}
     </delete>
 
     <select id="selectCommentList" resultType="map" parameterType="int">
-        select * from omakase.comment where post_no = #{post_no} order by comment_date asc
+        select * from omakase.comment where postId = #{postId} order by createdAt asc
     </select>
 </mapper>
