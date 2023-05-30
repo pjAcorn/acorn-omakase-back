@@ -26,12 +26,12 @@ public class CommentService {
         commentMapper.updateLike(comment_no);
     }
 
-    public void modComment(modCommentDTO comment) {
+    /*public void modComment(modCommentDTO comment) {
         Comment toComment = Comment.of(comment.getComment_no(), comment.getComment_content(), comment.getComment_like_cnt()
                 , comment.getComment_date(), comment.getUser_nickname(), comment.getPost_no());
 
         commentMapper.updateComment(toComment);
-    }
+    }*/
 
     public void delComment(Object comment_no) {
         commentMapper.deleteComment(comment_no);

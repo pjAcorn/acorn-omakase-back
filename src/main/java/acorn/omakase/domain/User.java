@@ -1,5 +1,6 @@
 package acorn.omakase.domain;
 
+import acorn.omakase.dto.userdto.DeleteIdRequest;
 import acorn.omakase.dto.userdto.FindIdRequest;
 import acorn.omakase.dto.userdto.SignupRequest;
 import lombok.*;
@@ -17,8 +18,8 @@ public class User {
     private String nickname;
 
     @Builder
-    public User(String loginId, String name, String password, String email, String region, String nickname) {
-
+    public User(Long userId, String loginId, String name, String password, String email, String region, String nickname) {
+        this.userId = userId;
         this.loginId = loginId;
         this.name = name;
         this.password = password;
@@ -39,9 +40,7 @@ public class User {
 
     public static User of(FindIdRequest findIdRequest) {
         return User.builder()
-                .loginId(findIdRequest.getLoginId())
                 .email(findIdRequest.getEmail())
                 .name(findIdRequest.getName()).build();
     }
-
 }

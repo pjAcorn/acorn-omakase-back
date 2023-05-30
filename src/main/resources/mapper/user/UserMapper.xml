@@ -18,13 +18,24 @@
         VALUES (#{loginId}, #{name}, #{password}, #{email}, #{region}, #{nickname})
     </insert>
 
-
-    <select id="findid" parameterType="acorn.omakase.domain.User" resultType="String">
+    <select id="findId" parameterType="acorn.omakase.domain.User" resultType="String">
         SELECT login_id FROM USER WHERE name=#{name} and email=#{email}
     </select>
+
     <select id="login" parameterType="acorn.omakase.domain.Login" resultType="int">
         SELECT COUNT(*)
         FROM USER
         WHERE login_id = #{loginId} AND password = #{password}
     </select>
+
+    <!--회원 암호 가져오기-->
+    <select id="getPw" parameterType="acorn.omakase.domain.User" resultType="String">
+        SELECT password FROM USER WHERE user_id = #{userId}
+
+    </select>
+
+    <!--회원 탈퇴-->
+    <delete id="deleteId" parameterType="acorn.omakase.domain.User" >
+        DELETE FROM USER WHERE user_id = #{userId}
+    </delete>
 </mapper>
