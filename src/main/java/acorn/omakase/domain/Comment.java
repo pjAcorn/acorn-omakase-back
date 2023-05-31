@@ -9,16 +9,16 @@ import java.sql.Date;
 public class Comment {
     private Long commentId;
     private String content;
-    private Long likes;
+    private Long likeCount;
     private Date createdAt;
     private String nickname;
     private Long postId;
 
     @Builder
-    public Comment(Long commentId, String content, Long likes, Date createdAt, String nickname, Long postId) {
+    public Comment(Long commentId, String content, Long likeCount, Date createdAt, String nickname, Long postId) {
         this.commentId = commentId;
         this.content = content;
-        this.likes = likes;
+        this.likeCount = likeCount;
         this.createdAt = createdAt;
         this.nickname = nickname;
         this.postId = postId;
