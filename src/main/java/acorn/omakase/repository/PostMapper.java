@@ -1,6 +1,9 @@
 package acorn.omakase.repository;
 
 import acorn.omakase.domain.Post;
+import acorn.omakase.dto.postdto.NewestPostDto;
+import acorn.omakase.dto.postdto.SearchDto;
+import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -15,7 +18,9 @@ public interface PostMapper {
 
     List<Post> selectPostView(Object postId);
 
-    List<Post> selectPostList();
+    List<NewestPostDto> findPostListByNewest(SearchDto params);
+
+    int count(SearchDto params);
 
     List<Post> selectCategoryPostList(Object category);
 }

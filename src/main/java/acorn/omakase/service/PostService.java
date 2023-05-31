@@ -2,14 +2,15 @@ package acorn.omakase.service;
 
 
 import acorn.omakase.domain.Post;
-import acorn.omakase.dto.postdto.modPostRequest;
-import acorn.omakase.dto.postdto.newPostRequest;
+import acorn.omakase.dto.postdto.*;
 import acorn.omakase.repository.PostMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,8 +38,13 @@ public class PostService {
         return postMapper.selectPostView(postId);
     }
 
-    public List<Post> listPost() {
-        return postMapper.selectPostList();
+    public NewestListResponse PostListByNewest(SearchDto params) {
+
+        List<NewestPostDto> postListByNewest = postMapper.findPostListByNewest(params);
+
+        NewestListResponse newestListResponse = new NewestListResponse(postListByNewest);
+
+        return newestListResponse;
     }
 
     public List<Post> listCategoryPost(Object category) {

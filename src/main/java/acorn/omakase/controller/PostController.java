@@ -2,6 +2,8 @@ package acorn.omakase.controller;
 
 import acorn.omakase.domain.Comment;
 import acorn.omakase.domain.Post;
+import acorn.omakase.dto.postdto.NewestListResponse;
+import acorn.omakase.dto.postdto.SearchDto;
 import acorn.omakase.dto.postdto.modPostRequest;
 import acorn.omakase.dto.postdto.newPostRequest;
 import acorn.omakase.service.CommentService;
@@ -58,12 +60,17 @@ public class PostController {
         return new ResponseEntity(postNcomment, HttpStatus.OK);
     }
 
-    // 게시판 리스트
-    @GetMapping("/list_post")
-    public ResponseEntity listPost(){
-        List<Post> postList = postService.listPost();
+    // 게시판 리스트 최신순
+    @GetMapping("/newest")
+    public ResponseEntity newestPostList(
+            @RequestParam(value = "recordSize", required = false, defaultValue = "10") int recordSize,
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page
+    ){
 
-        return new ResponseEntity(postList, HttpStatus.OK);
+        NewestListResponse newestListResponse = postService
+                .PostListByNewest(new SearchDto(page, recordSize, 10));
+
+        return new ResponseEntity(newestListResponse, HttpStatus.OK);
     }
 
     // 카테고리 별 게시판 리스트(매핑 잘 모르겟다)

@@ -50,6 +50,7 @@ public class UserService {
 
     public User login(LoginRequest loginRequest) throws Exception {
         User userId = userMapper.login(loginRequest);
+
         if(userId==null){
              throw new Exception("아이디/비밀번호가 일치하지 않습니다.");
         }

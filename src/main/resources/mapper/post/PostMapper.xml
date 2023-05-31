@@ -17,11 +17,23 @@
         select * from omakase.post where postId = #{postId}
     </select>
 
-    <select id="selectPostList" resultType="map">
-        select * from omakase.post order by createdAt desc
-    </select>
-
     <select id="selectCategoryPostList" resultType="map" parameterType="String">
         select * from omakase.post where category = #{category} order by createdAt desc
+    </select>
+
+    <!-- 게시글 리스트 조회 -->
+    <select id="findPostListByNewest" parameterType="acorn.omakase.dto.postdto.SearchDto"
+            resultType="acorn.omakase.dto.postdto.NewestPostDto">
+        select p.post_id, p.title, p.created_at, u.nickname
+        from POST p
+        left join USER u ON p.post_id
+        order by p.created_at desc
+        limit #{offset}, #{recordSize}
+    </select>
+
+    <!-- 카운트 함수 -->
+    <select id="count" parameterType="acorn.omakase.dto.postdto.SearchDto" resultType="int">
+        SELECT COUNT(*)
+        FROM POST
     </select>
 </mapper>
