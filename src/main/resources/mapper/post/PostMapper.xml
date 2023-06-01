@@ -29,13 +29,13 @@
             resultType="map">
         select p.post_id, p.title, p.created_at, u.nickname
         from POST p
-        left join USER u
-        ON p.post_id = u.user_id
+        join USER u
+        ON p.user_id = u.user_id
         order by p.created_at desc
 
     </select>
 
-    <!-- 카운트 함수 -->
+    <!-- 카운트 쿼리 -->
     <select id="count" parameterType="acorn.omakase.dto.postdto.NewestPostDto" resultType="int">
         SELECT COUNT(*)
         FROM POST
