@@ -8,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,8 +16,9 @@ import java.util.stream.Collectors;
 public class PostService {
     private final PostMapper postMapper;
 
-    public void addPost(newPostRequest post) {
-        Post savePost = Post.ofNew(post.getTitle(), post.getContent(), post.getNickname(), post.getCategory());
+    public void addPost(NewPostRequest newPostRequest) {
+        Post savePost = Post.ofNew(
+                newPostRequest.getTitle(), newPostRequest.getContent(), newPostRequest.getUserId(), newPostRequest.getCategory());
 
         postMapper.insertPost(savePost);
     }
@@ -38,13 +37,9 @@ public class PostService {
         return postMapper.selectPostView(postId);
     }
 
-    public NewestListResponse PostListByNewest(SearchDto params) {
+    public List<NewestPostDto> PostListByNewest() {
 
-        List<NewestPostDto> postListByNewest = postMapper.findPostListByNewest(params);
-
-        NewestListResponse newestListResponse = new NewestListResponse(postListByNewest);
-
-        return newestListResponse;
+        return postMapper.findPostListByNewest();
     }
 
     public List<Post> listCategoryPost(Object category) {

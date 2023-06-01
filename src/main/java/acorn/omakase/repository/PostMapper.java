@@ -18,7 +18,7 @@ public interface PostMapper {
 
     List<Post> selectPostView(Object postId);
 
-    List<NewestPostDto> findPostListByNewest(SearchDto params);
+    List<NewestPostDto> findPostListByNewest();
 
     int count(SearchDto params);
 

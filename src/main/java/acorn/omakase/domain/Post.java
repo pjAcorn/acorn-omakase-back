@@ -11,27 +11,27 @@ import java.sql.Date;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
     private Long postId;
+    private Long userId;
     private String title;
     private String content;
-    private String nickname;
     private Date createdAt;
     private String category;
 
     @Builder
-    public Post(Long postId, String title, String content, String nickname, Date createdAt, String category){
+    public Post(Long postId, String title, String content,Long userId, Date createdAt, String category){
         this.postId = postId;
         this.title = title;
         this.content = content;
-        this.nickname = nickname;
+        this.userId = userId;
         this.createdAt = createdAt;
         this.category = category;
     }
 
-    public static Post ofNew(String title, String content, String nickname, String category){
+    public static Post ofNew(String title, String content, Long userId, String category){
         return Post.builder()
                 .title(title)
                 .content(content)
-                .nickname(nickname)
+                .userId(userId)
                 .category(category).build();
     }
 

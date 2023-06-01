@@ -2,12 +2,11 @@ package acorn.omakase.controller;
 
 import acorn.omakase.domain.Comment;
 import acorn.omakase.domain.Post;
-import acorn.omakase.dto.postdto.NewestListResponse;
-import acorn.omakase.dto.postdto.SearchDto;
-import acorn.omakase.dto.postdto.modPostRequest;
-import acorn.omakase.dto.postdto.newPostRequest;
+import acorn.omakase.dto.postdto.*;
 import acorn.omakase.service.CommentService;
 import acorn.omakase.service.PostService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +24,9 @@ public class PostController {
     private final CommentService commentService;
 
     // 새 글 쓰기
-    @PostMapping("/new_post")
-    public ResponseEntity addPost(@RequestBody newPostRequest post){
-        postService.addPost(post);
+    @PostMapping("/new")
+    public ResponseEntity addPost(@RequestBody NewPostRequest newPostRequest){
+        postService.addPost(newPostRequest);
 
         return new ResponseEntity(HttpStatus.CREATED);
     }
@@ -63,14 +62,12 @@ public class PostController {
     // 게시판 리스트 최신순
     @GetMapping("/newest")
     public ResponseEntity newestPostList(
-            @RequestParam(value = "recordSize", required = false, defaultValue = "10") int recordSize,
-            @RequestParam(value = "page", required = false, defaultValue = "0") int page
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+            @RequestParam(value = "pageNum", required = false, defaultValue = "0") int pageNum
     ){
-
-        NewestListResponse newestListResponse = postService
-                .PostListByNewest(new SearchDto(page, recordSize, 10));
-
-        return new ResponseEntity(newestListResponse, HttpStatus.OK);
+        PageHelper.startPage(pageNum, pageSize);
+        PageInfo<NewestPostDto> newestPostDtoPageInfo = PageInfo.of(postService.PostListByNewest());
+        return new ResponseEntity(newestPostDtoPageInfo, HttpStatus.OK);
     }
 
     // 카테고리 별 게시판 리스트(매핑 잘 모르겟다)

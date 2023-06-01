@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="acorn.omakase.repository.PostMapper">
-    <insert id="insertPost" parameterType="acorn.omakase.domain.Post">
-        insert into omakase.post(title, content, nickname, category) values(#{title}, #{content}, #{nickname}, #{category})
+
+    <!-- 게시글 등록 -->
+    <insert id="insertPost" parameterType="acorn.omakase.domain.Post" useGeneratedKeys="true"
+            keyProperty="postId" keyColumn="post_id">
+        insert into omakase.post(title, content, user_id, category) values(#{title}, #{content}, #{userId}, #{category})
     </insert>
 
     <update id="updatePost" parameterType="acorn.omakase.domain.Post">
@@ -22,17 +25,18 @@
     </select>
 
     <!-- 게시글 리스트 조회 -->
-    <select id="findPostListByNewest" parameterType="acorn.omakase.dto.postdto.SearchDto"
-            resultType="acorn.omakase.dto.postdto.NewestPostDto">
+    <select id="findPostListByNewest" parameterType="acorn.omakase.dto.postdto.NewestPostDto"
+            resultType="map">
         select p.post_id, p.title, p.created_at, u.nickname
         from POST p
-        left join USER u ON p.post_id
+        left join USER u
+        ON p.post_id = u.user_id
         order by p.created_at desc
-        limit #{offset}, #{recordSize}
+
     </select>
 
     <!-- 카운트 함수 -->
-    <select id="count" parameterType="acorn.omakase.dto.postdto.SearchDto" resultType="int">
+    <select id="count" parameterType="acorn.omakase.dto.postdto.NewestPostDto" resultType="int">
         SELECT COUNT(*)
         FROM POST
     </select>
