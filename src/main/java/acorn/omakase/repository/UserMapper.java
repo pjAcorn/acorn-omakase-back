@@ -29,4 +29,6 @@ public interface UserMapper {
     // 비밀번호 가져오기(회원탈퇴)
     String getPw(Long userId);
 
+    // 아이디 중복 검사
+    int idValidate(User user);
 }
