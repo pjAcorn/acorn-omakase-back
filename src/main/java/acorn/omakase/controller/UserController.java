@@ -1,10 +1,7 @@
 package acorn.omakase.controller;
 
 import acorn.omakase.domain.User;
-import acorn.omakase.dto.userdto.DeleteIdRequest;
-import acorn.omakase.dto.userdto.FindIdRequest;
-import acorn.omakase.dto.userdto.LoginRequest;
-import acorn.omakase.dto.userdto.SignupRequest;
+import acorn.omakase.dto.userdto.*;
 import acorn.omakase.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.annotations.Delete;
@@ -57,6 +54,14 @@ public class UserController {
     @PostMapping("/delete")
     public ResponseEntity delete(@RequestBody DeleteIdRequest deleteIdRequest){
         userService.delete(deleteIdRequest);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    // 아이디 중복 확인
+    @PostMapping("/idValidation")
+    public ResponseEntity IdValidation(@RequestBody IdValidateRequest idValidateRequest){
+        userService.idValidate(idValidateRequest);
+        System.out.println("아이디 사용 가능");
         return new ResponseEntity(HttpStatus.OK);
     }
 

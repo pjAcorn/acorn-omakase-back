@@ -1,11 +1,7 @@
 package acorn.omakase.service;
 
 import acorn.omakase.domain.User;
-import acorn.omakase.dto.userdto.DeleteIdRequest;
-import acorn.omakase.dto.userdto.FindIdRequest;
-import acorn.omakase.dto.userdto.HomeResponse;
-import acorn.omakase.dto.userdto.LoginRequest;
-import acorn.omakase.dto.userdto.SignupRequest;
+import acorn.omakase.dto.userdto.*;
 import acorn.omakase.repository.UserMapper;
 import lombok.RequiredArgsConstructor;
 
@@ -82,4 +78,14 @@ public class UserService {
         }
     }
 
+    // 아이디 중복 확인
+    public void idValidate(IdValidateRequest idValidateRequest){
+        User idChk = User.of(idValidateRequest);
+
+        int check = userMapper.idValidate(idChk);
+
+        if(check > 0){
+            throw new IllegalStateException("중복된 아이디 입니다.");
+        }
+    }
 }
