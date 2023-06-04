@@ -37,7 +37,7 @@ public class CommentController {
 //    댓글 수정
     @PatchMapping("/mod_comment")
     public ResponseEntity modComment(@RequestBody modCommentRequest comment){
-
+        System.out.println("test");
         //commentService.modComment(comment);
 
         return new ResponseEntity(HttpStatus.OK);
