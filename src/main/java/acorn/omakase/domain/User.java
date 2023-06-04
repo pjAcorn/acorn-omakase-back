@@ -2,6 +2,7 @@ package acorn.omakase.domain;
 
 import acorn.omakase.dto.userdto.DeleteIdRequest;
 import acorn.omakase.dto.userdto.FindIdRequest;
+import acorn.omakase.dto.userdto.IdValidateRequest;
 import acorn.omakase.dto.userdto.SignupRequest;
 import lombok.*;
 
@@ -42,5 +43,10 @@ public class User {
         return User.builder()
                 .email(findIdRequest.getEmail())
                 .name(findIdRequest.getName()).build();
+    }
+
+    public static User of(IdValidateRequest idValidateRequest){
+        return User.builder()
+                .loginId(idValidateRequest.getLoginId()).build();
     }
 }

@@ -34,4 +34,11 @@
     <delete id="deleteId" parameterType="acorn.omakase.domain.User" >
         DELETE FROM USER WHERE user_id = #{userId}
     </delete>
+
+    <!--아이디 중복 확인-->
+    <select id="idValidate" parameterType="acorn.omakase.domain.User" resultType="int">
+        SELECT COUNT(*)
+        FROM USER
+        WHERE login_id = #{loginId}
+    </select>
 </mapper>
