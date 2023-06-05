@@ -19,8 +19,8 @@
     </select>
 
     <!--회원 비밀번호 찾기-->
-    <select id="findPw" parameterType="acorn.omakase.dto.userdto.FindPwRequest" resultType="String">
-        SELECT password FROM USER WHERE login_id=#{loginId}
+    <select id="findPw" parameterType="acorn.omakase.dto.userdto.FindPwRequest" resultType="int">
+        SELECT COUNT(password) FROM USER WHERE login_id=#{loginId}
     </select>
 
     <select id="login" parameterType="acorn.omakase.domain.User" resultType="acorn.omakase.domain.User">
@@ -46,4 +46,10 @@
         FROM USER
         WHERE login_id = #{loginId}
     </select>
+
+    <update id="resetPw" parameterType="acorn.omakase.dto.userdto.ResetPwRequest">
+        UPDATE USER
+        SET password = #{pw1}
+        where login_id = #{loginId}
+    </update>
 </mapper>

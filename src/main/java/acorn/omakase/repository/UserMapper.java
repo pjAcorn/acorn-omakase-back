@@ -2,11 +2,7 @@ package acorn.omakase.repository;
 
 import acorn.omakase.domain.User;
 
-import acorn.omakase.dto.userdto.DeleteIdRequest;
-import acorn.omakase.dto.userdto.FindIdRequest;
-
-import acorn.omakase.dto.userdto.FindPwRequest;
-import acorn.omakase.dto.userdto.LoginRequest;
+import acorn.omakase.dto.userdto.*;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -22,7 +18,7 @@ public interface UserMapper {
 
     String findId(FindIdRequest findId);
 
-    String findPw(FindPwRequest findPw);
+    int findPw(FindPwRequest findPw);
 
     User login(LoginRequest loginRequest);
 
@@ -34,4 +30,7 @@ public interface UserMapper {
 
     // 아이디 중복 검사
     int idValidate(User user);
+
+    // 비밀번호 변경
+    int resetPw(ResetPwRequest resetPwRequest);
 }

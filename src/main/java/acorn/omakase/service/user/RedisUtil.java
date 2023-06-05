@@ -1,4 +1,4 @@
-package acorn.omakase.service;
+package acorn.omakase.service.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
