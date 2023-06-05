@@ -5,6 +5,7 @@ import acorn.omakase.domain.User;
 import acorn.omakase.dto.userdto.DeleteIdRequest;
 import acorn.omakase.dto.userdto.FindIdRequest;
 
+import acorn.omakase.dto.userdto.FindPwRequest;
 import acorn.omakase.dto.userdto.LoginRequest;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -19,13 +20,15 @@ public interface UserMapper {
     void signup(User user);
 
 
-    String findId(FindIdRequest findid);
+    String findId(FindIdRequest findId);
+
+    String findPw(FindPwRequest findPw);
 
     User login(LoginRequest loginRequest);
 
-
     // 회원 탈퇴
     int deleteId(Long userId);
+
     // 비밀번호 가져오기(회원탈퇴)
     String getPw(Long userId);
 

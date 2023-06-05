@@ -2,14 +2,17 @@ package acorn.omakase.controller;
 
 import acorn.omakase.domain.User;
 import acorn.omakase.dto.userdto.*;
+import acorn.omakase.service.EmailService;
 import acorn.omakase.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
@@ -33,12 +36,20 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    // 아이디 찾기
+     // 아이디 찾기
     @PostMapping("/find/id")
     public ResponseEntity findId(@RequestBody FindIdRequest findIdRequest){
-            String id = userService.findId(findIdRequest);
+        String id = userService.findId(findIdRequest);
 
-            return new ResponseEntity(id, HttpStatus.OK);
+        return new ResponseEntity(id, HttpStatus.OK);
+    }
+
+    // 비밀번호 찾기
+    @PostMapping("/find/pw")
+    public ResponseEntity findPw(@RequestBody FindPwRequest findPwRequest){
+        String pw = userService.findPw(findPwRequest);
+        System.out.println("암호 : " + pw);
+        return new ResponseEntity(pw, HttpStatus.OK);
     }
 
 
@@ -48,7 +59,6 @@ public class UserController {
 
         return new ResponseEntity(userId, HttpStatus.OK);
     }
-
 
     // 회원탈퇴
     @PostMapping("/delete")
@@ -63,6 +73,16 @@ public class UserController {
         userService.idValidate(idValidateRequest);
         System.out.println("아이디 사용 가능");
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    private final EmailService emailService;
+
+    // 이메일 인증
+    @PostMapping("/login/mailConfirm")
+    public String mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
+
+        String authCode = emailService.sendEmail(emailDto.getEmail());
+        return authCode;
     }
 
 }
