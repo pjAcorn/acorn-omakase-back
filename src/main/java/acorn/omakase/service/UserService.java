@@ -60,7 +60,7 @@ public class UserService {
         if(!email.equals(redisEmail)){
             throw new IllegalStateException("인증번호 불일치");
         }
-
+        //findPw 가 아닌 password 변경 로직이 더 좋을 것 같다.
         String pw = userMapper.findPw(findPwRequest);
 
         return pw;
