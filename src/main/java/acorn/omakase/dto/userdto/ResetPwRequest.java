@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FindIdRequest {
-        private String name;
-        private String email;
-        private String code;
+public class ResetPwRequest {
+    private String loginId;
+    private String pw1;
+    private String pw2;
 }
