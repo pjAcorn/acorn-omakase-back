@@ -46,4 +46,10 @@
         FROM USER
         WHERE login_id = #{loginId}
     </select>
+
+    <update id="resetPw" parameterType="acorn.omakase.dto.userdto.ResetPwRequest">
+        UPDATE USER
+        SET password = #{pw1}
+        where login_id = #{loginId}
+    </update>
 </mapper>

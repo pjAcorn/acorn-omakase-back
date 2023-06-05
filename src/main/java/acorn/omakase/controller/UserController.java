@@ -86,5 +86,12 @@ public class UserController {
         return authCode;
     }
 
+    // 비밀번호 재설정
+    @PatchMapping("/modify/pw")
+    public ResponseEntity resetPw(@RequestBody ResetPwRequest resetPwRequest){
+        userService.resetPw(resetPwRequest);
+
+        return new ResponseEntity<String>("비밀번호 변경 완료", HttpStatus.OK);
+    }
 }
 

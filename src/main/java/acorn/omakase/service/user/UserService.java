@@ -107,6 +107,14 @@ public class UserService {
         }
     }
 
+    public void resetPw(ResetPwRequest resetPwRequest){
+        String pw1 = resetPwRequest.getPw1();
+        String pw2 = resetPwRequest.getPw2();
 
+        if(!pw1.equals(pw2)){
+            throw new IllegalStateException("두 비밀번호가 일치하지 않습니다.");
+        }
 
+        userMapper.resetPw(resetPwRequest);
+    }
 }
