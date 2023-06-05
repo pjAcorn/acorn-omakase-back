@@ -1,4 +1,4 @@
-package acorn.omakase.service;
+package acorn.omakase.service.user;
 
 import acorn.omakase.domain.User;
 import acorn.omakase.dto.userdto.*;
@@ -7,16 +7,11 @@ import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.thymeleaf.spring5.SpringTemplateEngine;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import java.util.List;
-import java.util.Random;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -47,13 +42,13 @@ public class UserService {
         if (!email.equals(redisEmail)){
             throw new IllegalStateException("인증번호 불일치");
         }
-        String id = userMapper.findId(findIdRequest);
 
-        return id;
+        return Optional.ofNullable(userMapper.findId(findIdRequest))
+                .orElseThrow(() -> new IllegalStateException("가입된 정보가 없습니다"));
     }
 
     // 비밀번호 찾기
-    public String findPw(FindPwRequest findPwRequest){
+    public void findPw(FindPwRequest findPwRequest){
         String email = findPwRequest.getEmail();
         String redisEmail = redisUtil.getData(findPwRequest.getCode());
 
@@ -61,9 +56,12 @@ public class UserService {
             throw new IllegalStateException("인증번호 불일치");
         }
 
-        String pw = userMapper.findPw(findPwRequest);
+        int pwChk = userMapper.findPw(findPwRequest);
 
-        return pw;
+        if(!(pwChk>0)){
+            throw new IllegalStateException("가입된 정보가 없습니다.");
+        }
+
     }
 
     public User login(LoginRequest loginRequest) throws Exception {

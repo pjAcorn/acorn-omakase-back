@@ -2,8 +2,8 @@ package acorn.omakase.controller;
 
 import acorn.omakase.domain.User;
 import acorn.omakase.dto.userdto.*;
-import acorn.omakase.service.EmailService;
-import acorn.omakase.service.UserService;
+import acorn.omakase.service.user.EmailService;
+import acorn.omakase.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +14,7 @@ import javax.mail.MessagingException;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,9 +48,9 @@ public class UserController {
     // 비밀번호 찾기
     @PostMapping("/find/pw")
     public ResponseEntity findPw(@RequestBody FindPwRequest findPwRequest){
-        String pw = userService.findPw(findPwRequest);
-        System.out.println("암호 : " + pw);
-        return new ResponseEntity(pw, HttpStatus.OK);
+        userService.findPw(findPwRequest);
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 
@@ -71,7 +72,7 @@ public class UserController {
     @PostMapping("/idValidation")
     public ResponseEntity IdValidation(@RequestBody IdValidateRequest idValidateRequest){
         userService.idValidate(idValidateRequest);
-        System.out.println("아이디 사용 가능");
+
         return new ResponseEntity(HttpStatus.OK);
     }
 

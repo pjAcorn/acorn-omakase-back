@@ -22,7 +22,7 @@ public interface UserMapper {
 
     String findId(FindIdRequest findId);
 
-    String findPw(FindPwRequest findPw);
+    int findPw(FindPwRequest findPw);
 
     User login(LoginRequest loginRequest);
 
