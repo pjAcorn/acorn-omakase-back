@@ -56,11 +56,14 @@ public class UserService {
             throw new IllegalStateException("인증번호 불일치");
         }
 
+
         int pwChk = userMapper.findPw(findPwRequest);
 
         if(!(pwChk>0)){
             throw new IllegalStateException("가입된 정보가 없습니다.");
         }
+
+
 
     }
 

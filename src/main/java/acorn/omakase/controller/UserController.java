@@ -83,6 +83,7 @@ public class UserController {
     public String mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
 
         String authCode = emailService.sendEmail(emailDto.getEmail());
+        // 인증코드를 그대로 반환하는거?
         return authCode;
     }
 
