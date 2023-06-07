@@ -27,7 +27,10 @@
     <!-- 게시글 리스트 조회 -->
     <select id="findPostListByNewest" parameterType="acorn.omakase.dto.postdto.NewestPostDto"
             resultType="map">
-        select p.post_id, p.title, p.created_at, u.nickname
+        select p.post_id,
+        p.title,
+        DATE_FORMAT(p.created_at, '%Y-%m-%d %H:%i') as created_at,
+        u.nickname
         from POST p
         join USER u
         ON p.user_id = u.user_id
