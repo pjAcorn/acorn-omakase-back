@@ -67,10 +67,11 @@ public class UserService {
 
     }
 
-    public User login(LoginRequest loginRequest) throws Exception {
-        User userId = userMapper.login(loginRequest);
 
-        if (userId == null) {
+    public String login(LoginRequest loginRequest) throws Exception {
+        int userExists = userMapper.login(loginRequest);
+        String userId = loginRequest.getLoginId();
+        if(userExists == 0) {
             throw new Exception("아이디/비밀번호가 일치하지 않습니다.");
         }
         return userId;

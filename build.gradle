@@ -38,10 +38,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-	// swagger
-	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
-	implementation 'io.springfox:springfox-swagger2:2.9.2'
-
 
 	//토큰
 	//security
@@ -55,6 +51,7 @@ dependencies {
 	implementation 'org.hibernate:hibernate-core:5.5.7.Final'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpas'
 	implementation 'org.springframework.data:spring-data-jpa:2.5.0'
+
 }
 
 tasks.named('test') {

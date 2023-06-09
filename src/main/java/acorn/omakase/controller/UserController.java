@@ -5,7 +5,6 @@ import acorn.omakase.dto.userdto.*;
 import acorn.omakase.service.user.EmailService;
 import acorn.omakase.service.user.MemberService;
 import acorn.omakase.service.user.UserService;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +23,7 @@ public class UserController {
 
     private final UserService userService;
     private final MemberService memberService;
+    private final EmailService emailService;
 
     @GetMapping("/userlist")
     public ResponseEntity getUserList() {
@@ -31,7 +31,7 @@ public class UserController {
         return new ResponseEntity(userList, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "회원가입")
+
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestBody SignupRequest signupRequest) {
         userService.signup(signupRequest);
@@ -39,7 +39,7 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @ApiOperation(value = "아이디 찾기")
+
     @PostMapping("/find/id")
     public ResponseEntity findId(@RequestBody FindIdRequest findIdRequest){
         String id = userService.findId(findIdRequest);
@@ -65,6 +65,9 @@ public class UserController {
     @PostMapping("/login")
     public TokenInfo login(@RequestBody LoginRequest loginRequest) {
 
+        String userId = userService.login(loginRequest);
+
+
         String loginId = loginRequest.getLoginId();
         String password = loginRequest.getPassword();
         TokenInfo tokenInfo = memberService.login(loginId, password);
@@ -86,7 +89,7 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    private final EmailService emailService;
+    
 
     // 이메일 인증
     @PostMapping("/login/mailConfirm")
