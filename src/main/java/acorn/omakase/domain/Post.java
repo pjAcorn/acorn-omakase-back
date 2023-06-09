@@ -14,6 +14,7 @@ public class Post {
     private Long userId;
     private String title;
     private String content;
+    private Long viewCount;
     private Date createdAt;
     private String category;
 
@@ -42,4 +43,6 @@ public class Post {
                 .content(content)
                 .category(category).build();
     }
+
+
 }

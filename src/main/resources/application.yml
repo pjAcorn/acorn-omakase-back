@@ -1,2 +1,50 @@
-override:
-  value: 'from application.yml'
+spring:
+  datasource:
+    username: root
+    password: Whrjsgml199#
+
+    mapper-locations: classpath:/mapper/**/*.xml
+    jdbc-url: jdbc:mysql://localhost:3306/omakase?&serverTimezone=UTC&autoReconnect=true&allowMultiQueries=true&characterEncoding=UTF-8
+    driver: com.mysql.cj.jdbc.Driver
+
+  main:
+    allow-circular-references: true
+
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: pjacorn0513@naver.com # 네이버아이디
+    password: Pjacorn0513@@ # 네이버 비밀번호
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            required: true
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+          ssl:
+            trust: smtp.naver.com
+            enable: true
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  config-location: classpath:/mybatis/mybatis-config.xml
+
+pagehelper:
+  #  helper-dialect: h2
+  auto-dialect: true
+  page-size-zero: false
+  reasonable: true
+  offset-as-page-num: false
+  row-bounds-with-count: false
+  auto-runtime-dialect: false
+  close-conn: true
+  default-count: true

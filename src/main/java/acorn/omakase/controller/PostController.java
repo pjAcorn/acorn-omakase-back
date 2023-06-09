@@ -49,16 +49,13 @@ public class PostController {
     }
 
     // 게시판 뷰
-    @GetMapping("/view_post")
-    public ResponseEntity viewPost(@RequestBody Object postId){
-        List<Post> postView = postService.viewPost(postId);
-        List<Comment> commentList = commentService.viewComment(postId);
+    @GetMapping("/{postId}")
+    public ResponseEntity viewPost(@PathVariable Long postId){
+        PostResponse postResponse = postService.viewPost(postId);
+//        List<Comment> commentList = commentService.viewComment(postId);
 
-        Map postNcomment = new HashMap();
-        postNcomment.put("post", postView);
-        postNcomment.put("comment", commentList);
 
-        return new ResponseEntity(postNcomment, HttpStatus.OK);
+        return new ResponseEntity(postResponse, HttpStatus.OK);
     }
 
     // 게시판 리스트 최신순

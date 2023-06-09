@@ -33,8 +33,13 @@ public class PostService {
         postMapper.deletePost(postId);
     }
 
-    public List<Post> viewPost(Object postId) {
-        return postMapper.selectPostView(postId);
+    public PostResponse viewPost(Long postId) {
+        PostResponse post = postMapper.findById(postId);
+        if (post == null) {
+            throw new IllegalStateException("게시물이 없습니다.");
+        }
+
+        return post;
     }
 
     public List<NewestPostDto> PostListByNewest() {
