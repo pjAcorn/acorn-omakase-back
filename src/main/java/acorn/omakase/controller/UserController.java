@@ -3,6 +3,7 @@ package acorn.omakase.controller;
 import acorn.omakase.domain.User;
 import acorn.omakase.dto.userdto.*;
 import acorn.omakase.service.user.EmailService;
+import acorn.omakase.service.user.MemberService;
 import acorn.omakase.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,10 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +22,8 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final MemberService memberService;
+    private final EmailService emailService;
 
     @GetMapping("/userlist")
     public ResponseEntity getUserList() {
@@ -55,12 +56,23 @@ public class UserController {
     }
 
 
+//    @PostMapping("/login")
+//    public ResponseEntity login(@RequestBody LoginRequest loginRequest) throws Exception {
+//        User userId = userService.login(loginRequest);
+//
+//        return new ResponseEntity(userId, HttpStatus.OK);
+//    }
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequest loginRequest) throws Exception {
+    public TokenInfo login(@RequestBody LoginRequest loginRequest) {
+
         String userId = userService.login(loginRequest);
 
-        return new ResponseEntity(userId, HttpStatus.OK);
-    }
+
+        String loginId = loginRequest.getLoginId();
+        String password = loginRequest.getPassword();
+        TokenInfo tokenInfo = memberService.login(loginId, password);
+        return tokenInfo;
+}
 
     // 회원탈퇴
     @PostMapping("/delete")
@@ -77,15 +89,14 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    private final EmailService emailService;
+    
 
     // 이메일 인증
     @PostMapping("/login/mailConfirm")
-    public String mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
+    public void mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
 
-        String authCode = emailService.sendEmail(emailDto.getEmail());
-        // 인증코드를 그대로 반환하는거?
-        return authCode;
+        emailService.sendEmail(emailDto.getEmail());
+
     }
 
     // 비밀번호 재설정
