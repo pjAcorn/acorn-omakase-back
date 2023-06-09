@@ -41,6 +41,20 @@ dependencies {
 	// swagger
 	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
 	implementation 'io.springfox:springfox-swagger2:2.9.2'
+
+
+	//토큰
+	//security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// jwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	implementation 'org.hibernate:hibernate-core:5.5.7.Final'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpas'
+	implementation 'org.springframework.data:spring-data-jpa:2.5.0'
 }
 
 tasks.named('test') {
