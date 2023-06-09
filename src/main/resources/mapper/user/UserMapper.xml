@@ -7,11 +7,19 @@
         ORDER by name asc
     </select>
 
+    <!-- 회원 가입 -->
     <insert id="signup" parameterType="acorn.omakase.domain.User" useGeneratedKeys="true"
             keyProperty="userId" keyColumn="user_id">
         INSERT INTO USER (login_id, name, password, email, region, nickname)
         VALUES (#{loginId}, #{name}, #{password}, #{email}, #{region}, #{nickname})
     </insert>
+
+    <!-- 로그인 -->
+    <select id="login" parameterType="acorn.omakase.domain.User" resultType="int">
+        SELECT COUNT(*)
+        FROM USER
+        WHERE login_id = #{loginId} AND password = #{password}
+    </select>
 
     <!--회원 아이디 찾기-->
     <select id="findId" parameterType="acorn.omakase.dto.userdto.FindIdRequest" resultType="String">
@@ -32,7 +40,6 @@
     <!--회원 암호 가져오기-->
     <select id="getPw" parameterType="acorn.omakase.domain.User" resultType="String">
         SELECT password FROM USER WHERE user_id = #{userId}
-
     </select>
 
     <!--회원 탈퇴-->

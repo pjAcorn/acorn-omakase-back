@@ -20,7 +20,7 @@ public interface UserMapper {
 
     int findPw(FindPwRequest findPw);
 
-    User login(LoginRequest loginRequest);
+    int login(LoginRequest loginRequest);
 
     // 회원 탈퇴
     int deleteId(Long userId);

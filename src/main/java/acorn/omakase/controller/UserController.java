@@ -58,7 +58,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequest loginRequest) throws Exception {
-        User userId = userService.login(loginRequest);
+        String userId = userService.login(loginRequest);
 
         return new ResponseEntity(userId, HttpStatus.OK);
     }
