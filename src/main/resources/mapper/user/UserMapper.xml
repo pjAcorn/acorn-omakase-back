@@ -10,12 +10,12 @@
         VALUES (#{loginId}, #{name}, #{password}, #{email}, #{region}, #{nickname})
     </insert>
 
-    <!-- 로그인 -->
-    <select id="login" parameterType="acorn.omakase.domain.User" resultType="int">
-        SELECT COUNT(*)
-        FROM USER
-        WHERE login_id = #{loginId} AND password = #{password}
-    </select>
+<!--    &lt;!&ndash; 로그인 &ndash;&gt;-->
+<!--    <select id="login" parameterType="acorn.omakase.domain.User" resultType="int">-->
+<!--        SELECT COUNT(*)-->
+<!--        FROM USER-->
+<!--        WHERE login_id = #{loginId} AND password = #{password}-->
+<!--    </select>-->
 
     <!--회원 아이디 찾기-->
     <select id="findId" parameterType="acorn.omakase.dto.userdto.FindIdRequest" resultType="String">

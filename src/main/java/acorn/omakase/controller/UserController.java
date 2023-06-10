@@ -19,7 +19,6 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
-@Transactional
 public class UserController {
 
     private final UserService userService;

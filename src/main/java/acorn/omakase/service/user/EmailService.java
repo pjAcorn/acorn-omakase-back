@@ -3,6 +3,7 @@ package acorn.omakase.service.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
@@ -13,6 +14,7 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class EmailService {
     private final JavaMailSender emailSender;
     private final SpringTemplateEngine templateEngine;

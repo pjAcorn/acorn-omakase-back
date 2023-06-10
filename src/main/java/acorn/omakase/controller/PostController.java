@@ -1,9 +1,7 @@
 package acorn.omakase.controller;
 
-import acorn.omakase.domain.Comment;
 import acorn.omakase.domain.Post;
 import acorn.omakase.dto.postdto.*;
-import acorn.omakase.service.CommentService;
 import acorn.omakase.service.PostService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -13,9 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -23,7 +19,6 @@ import java.util.Map;
 @RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
-    private final CommentService commentService;
 
     // 새 글 쓰기
     @PostMapping("/new")
