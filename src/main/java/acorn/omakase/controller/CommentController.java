@@ -52,6 +52,7 @@ public class CommentController {
     }
 
 //    댓글 보기(post에 매핑해놓음)
+    @GetMapping
     public ResponseEntity viewComment(@RequestBody Object postId){
         List<Comment> commentList = commentService.viewComment(postId);
 

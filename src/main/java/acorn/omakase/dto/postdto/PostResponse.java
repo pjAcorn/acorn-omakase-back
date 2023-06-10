@@ -14,4 +14,5 @@ public class PostResponse {
     private String createdAt;
     private String category;
     private String nickname;
+
 }
