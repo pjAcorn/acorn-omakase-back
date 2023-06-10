@@ -33,4 +33,7 @@ public interface UserMapper {
 
     // 비밀번호 변경
     int resetPw(ResetPwRequest resetPwRequest);
+
+    // 회원정보 가져오기
+    User findById(Long userId);
 }
