@@ -1,6 +1,7 @@
 package acorn.omakase.controller;
 
 import acorn.omakase.domain.Post;
+import acorn.omakase.dto.commentDto.commentListDTO;
 import acorn.omakase.dto.postdto.*;
 import acorn.omakase.service.PostService;
 import com.github.pagehelper.PageHelper;
@@ -29,14 +30,14 @@ public class PostController {
     }
 
     // 글 수정
-    @PatchMapping("/mod_post")
+    @PatchMapping("/mod")
     public ResponseEntity modPost(@RequestBody modPostRequest post){
         postService.modPost(post);
 
         return new ResponseEntity(HttpStatus.OK);
     }
     // 글 삭제
-    @DeleteMapping("/del_post")
+    @DeleteMapping("/del")
     public ResponseEntity delPost(@RequestBody Object postId){
         postService.delPost(postId);
 
@@ -45,10 +46,10 @@ public class PostController {
 
     // 게시판 뷰
     @GetMapping("/{postId}")
-    public ResponseEntity viewPost(@PathVariable Long postId){
-        PostResponse postResponse = postService.viewPost(postId);
-//        List<Comment> commentList = commentService.viewComment(postId);
-
+    public ResponseEntity viewPost(
+            @PathVariable Long postId
+    ){
+        PostResponse postResponse = postService.viewPost(postId); // 작업 중
 
         return new ResponseEntity(postResponse, HttpStatus.OK);
     }
@@ -65,11 +66,11 @@ public class PostController {
         return new ResponseEntity(newestPostDtoPageInfo, HttpStatus.OK);
     }
 
-    // 카테고리 별 게시판 리스트(매핑 잘 모르겟다)
-    @GetMapping("/list_category")
-    public ResponseEntity listCategoryPost(@RequestBody Object category){
-        List<Post> categoryPostList = postService.listCategoryPost(category);
 
-        return new ResponseEntity(categoryPostList, HttpStatus.OK);
-    }
+//    @GetMapping("/list_category")
+//    public ResponseEntity listCategoryPost(@RequestBody Object category){
+//        List<Post> categoryPostList = postService.listCategoryPost(category);
+//
+//        return new ResponseEntity(categoryPostList, HttpStatus.OK);
+//    }
 }
