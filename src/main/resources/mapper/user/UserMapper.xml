@@ -4,14 +4,14 @@
 
 
     <!-- 회원 가입 -->
-    <insert id="signup" parameterType="acorn.omakase.domain.User" useGeneratedKeys="true"
+    <insert id="signup" parameterType="acorn.omakase.domain.user.User" useGeneratedKeys="true"
             keyProperty="userId" keyColumn="user_id">
         INSERT INTO USER (login_id, name, password, email, region, nickname)
         VALUES (#{loginId}, #{name}, #{password}, #{email}, #{region}, #{nickname})
     </insert>
 
 <!--    &lt;!&ndash; 로그인 &ndash;&gt;-->
-<!--    <select id="login" parameterType="acorn.omakase.domain.User" resultType="int">-->
+<!--    <select id="login" parameterType="acorn.omakase.domain.user.User" resultType="int">-->
 <!--        SELECT COUNT(*)-->
 <!--        FROM USER-->
 <!--        WHERE login_id = #{loginId} AND password = #{password}-->
@@ -27,24 +27,24 @@
         SELECT COUNT(password) FROM USER WHERE login_id=#{loginId}
     </select>
 
-    <select id="login" parameterType="acorn.omakase.domain.User" resultType="int">
+    <select id="login" parameterType="acorn.omakase.domain.user.User" resultType="int">
         SELECT count(*)
         FROM USER
         WHERE login_id = #{loginId} AND password = #{password}
     </select>
 
     <!--회원 암호 가져오기-->
-    <select id="getPw" parameterType="acorn.omakase.domain.User" resultType="String">
+    <select id="getPw" parameterType="acorn.omakase.domain.user.User" resultType="String">
         SELECT password FROM USER WHERE user_id = #{userId}
     </select>
 
     <!--회원 탈퇴-->
-    <delete id="deleteId" parameterType="acorn.omakase.domain.User" >
+    <delete id="deleteId" parameterType="acorn.omakase.domain.user.User" >
         DELETE FROM USER WHERE user_id = #{userId}
     </delete>
 
     <!--아이디 중복 확인-->
-    <select id="idValidate" parameterType="acorn.omakase.domain.User" resultType="int">
+    <select id="idValidate" parameterType="acorn.omakase.domain.user.User" resultType="int">
         SELECT COUNT(*)
         FROM USER
         WHERE login_id = #{loginId}
@@ -57,7 +57,7 @@
     </update>
 
     <!--회원 정보 가져오기-->
-    <select id="findById" parameterType="acorn.omakase.domain.User" resultType="acorn.omakase.domain.User">
+    <select id="findById" parameterType="acorn.omakase.domain.user.User" resultType="acorn.omakase.domain.user.User">
         SELECT * FROM USER WHERE user_id = #{userId}
     </select>
 </mapper>

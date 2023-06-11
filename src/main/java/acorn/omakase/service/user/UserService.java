@@ -1,6 +1,6 @@
 package acorn.omakase.service.user;
 
-import acorn.omakase.domain.User;
+import acorn.omakase.domain.user.User;
 import acorn.omakase.dto.userdto.*;
 import acorn.omakase.repository.UserMapper;
 import acorn.omakase.token.TokenProvider;
@@ -14,7 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -29,10 +28,6 @@ public class UserService {
     private final BCryptPasswordEncoder encoder;
     private final TokenProvider tokenProvider;
 
-    public List<User> getUserList() {
-
-        return userMapper.getUserList();
-    }
 
     public void signup(SignupRequest signupRequest) {
 
@@ -75,16 +70,6 @@ public class UserService {
 
 
     }
-
-
-//    public int login(LoginRequest loginRequest) throws Exception {
-//        int userExists = userMapper.login(loginRequest);
-//        String userId = loginRequest.getLoginId();
-//        if(userExists == 0) {
-//            throw new Exception("아이디/비밀번호가 일치하지 않습니다.");
-//        }
-//        return userExists;
-//    }
 
     public LoginResponse login(LoginRequest loginRequest) {
 

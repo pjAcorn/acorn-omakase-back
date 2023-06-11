@@ -1,20 +1,18 @@
 package acorn.omakase.controller;
 
-import acorn.omakase.domain.User;
+import acorn.omakase.domain.user.User;
 import acorn.omakase.dto.userdto.*;
 import acorn.omakase.service.user.EmailService;
 import acorn.omakase.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,13 +20,6 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-
-    @GetMapping("/userlist")
-    public ResponseEntity getUserList() {
-        List<User> userList = userService.getUserList();
-        return new ResponseEntity(userList, HttpStatus.OK);
-    }
-
 
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestBody SignupRequest signupRequest) {
@@ -56,9 +47,9 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequest loginRequest) throws Exception {
-        String userId = userService.login(loginRequest);
+        LoginResponse loginResponse = userService.login(loginRequest);
 
-        return new ResponseEntity(userId, HttpStatus.OK);
+        return new ResponseEntity(loginResponse, HttpStatus.OK);
     }
 
     // 회원탈퇴
@@ -80,11 +71,11 @@ public class UserController {
 
     // 이메일 인증
     @PostMapping("/login/mailConfirm")
-    public String mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
+    public ResponseEntity mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
 
-        String authCode = emailService.sendEmail(emailDto.getEmail());
+        emailService.sendEmail(emailDto.getEmail());
         // 인증코드를 그대로 반환하는거?
-        return authCode;
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     // 비밀번호 재설정
