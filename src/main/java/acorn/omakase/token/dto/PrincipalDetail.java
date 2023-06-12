@@ -1,7 +1,7 @@
 package acorn.omakase.token.dto;
 
 
-import acorn.omakase.domain.User;
+import acorn.omakase.domain.user.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
