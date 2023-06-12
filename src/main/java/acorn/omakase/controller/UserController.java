@@ -1,5 +1,7 @@
 package acorn.omakase.controller;
 
+import acorn.omakase.common.code.SuccessCode;
+import acorn.omakase.common.response.ApiResponse;
 import acorn.omakase.domain.User;
 import acorn.omakase.dto.userdto.*;
 import acorn.omakase.service.user.EmailService;
@@ -7,14 +9,12 @@ import acorn.omakase.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -53,15 +53,39 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-<<<<<<< Updated upstream
+
+    // 로그인
 
     @PostMapping("/login")
+
     public ResponseEntity login(@RequestBody LoginRequest loginRequest) throws Exception {
+
         String userId = userService.login(loginRequest);
 
         return new ResponseEntity(userId, HttpStatus.OK);
+
+        User userId = userService.login(loginRequest);
+
+    public ResponseEntity<LoginResponse> login(@Validated @RequestBody LoginRequest loginRequest) {
+        LoginResponse loginResponse = userService.login(loginRequest);
+        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
     }
-=======
+
+
+    // 로그아웃
+    @GetMapping("/logout")
+    public ResponseEntity<ApiResponse> logout(
+            @RequestHeader(value = "Authorization") String acTokenRequest,
+            @RequestHeader(value = "RefreshToken") String rfTokenRequest
+    ) throws Exception {
+        String accessToken = acTokenRequest.substring(7);
+        String refreshToken = rfTokenRequest.substring(7);
+        userService.logout(accessToken, refreshToken);
+
+        return new ResponseEntity<>(new ApiResponse(SuccessCode.LOGOUT), HttpStatus.OK);
+
+    }
+
 //    @PostMapping("/login")
 //    public ResponseEntity login(@RequestBody LoginRequest loginRequest) throws Exception {
 //        User userId = userService.login(loginRequest);
@@ -78,7 +102,7 @@ public class UserController {
         TokenInfo tokenInfo = memberService.login(loginId, password);
         return tokenInfo;
 }
->>>>>>> Stashed changes
+
 
     // 회원탈퇴
     @PostMapping("/delete")
@@ -95,24 +119,27 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-<<<<<<< Updated upstream
+
     private final EmailService emailService;
 
     // 이메일 인증
     @PostMapping("/login/mailConfirm")
-    public String mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
+    public ResponseEntity mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
 
-        String authCode = emailService.sendEmail(emailDto.getEmail());
+        emailService.sendEmail(emailDto.getEmail());
         // 인증코드를 그대로 반환하는거?
+
         return authCode;
-=======
+
     // 이메일 인증
     @PostMapping("/login/mailConfirm")
     public ResponseEntity mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
 
         emailService.sendEmail(emailDto.getEmail());
         return new ResponseEntity(HttpStatus.OK);
->>>>>>> Stashed changes
+
+        return new ResponseEntity(HttpStatus.OK);
+
     }
 
     // 비밀번호 재설정
