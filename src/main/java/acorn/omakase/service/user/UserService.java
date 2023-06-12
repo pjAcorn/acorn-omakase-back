@@ -65,14 +65,17 @@ public class UserService {
             throw new IllegalStateException("인증번호 불일치");
         }
 
+
         int pwChk = userMapper.findPw(findPwRequest);
 
         if(!(pwChk>0)){
             throw new IllegalStateException("가입된 정보가 없습니다.");
         }
+
+
+
     }
 
-<<<<<<< Updated upstream
 
 //    public int login(LoginRequest loginRequest) throws Exception {
 //        int userExists = userMapper.login(loginRequest);
@@ -96,15 +99,6 @@ public class UserService {
 
         LoginResponse loginResponse = new LoginResponse(user.getUserId(), user.getNickname(), tokenResponse);
         return loginResponse;
-=======
-    public String login(LoginRequest loginRequest) throws Exception {
-        int userExists = userMapper.login(loginRequest);
-        String userId = loginRequest.getLoginId();
-        if(userExists == 0) {
-            throw new Exception("아이디/비밀번호가 일치하지 않습니다.");
-        }
-        return userId;
->>>>>>> Stashed changes
     }
 
     public User findById(Long userId){

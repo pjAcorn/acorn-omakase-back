@@ -8,14 +8,7 @@ import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-<<<<<<< Updated upstream
 public class User {
-=======
-@AllArgsConstructor
-public class User implements UserDetails {
-    @Id
-    private Long userId;
->>>>>>> Stashed changes
 
     private Long userId;
     private String loginId;

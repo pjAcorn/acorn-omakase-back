@@ -53,7 +53,6 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-<<<<<<< Updated upstream
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequest loginRequest) throws Exception {
@@ -61,24 +60,6 @@ public class UserController {
 
         return new ResponseEntity(userId, HttpStatus.OK);
     }
-=======
-//    @PostMapping("/login")
-//    public ResponseEntity login(@RequestBody LoginRequest loginRequest) throws Exception {
-//        User userId = userService.login(loginRequest);
-//
-//        return new ResponseEntity(userId, HttpStatus.OK);
-//    }
-
-    // 로그인 ( 토큰 발급 )
-    @PostMapping("/login")
-    public TokenInfo login(@RequestBody LoginRequest loginRequest) {
-
-        String loginId = loginRequest.getLoginId();
-        String password = loginRequest.getPassword();
-        TokenInfo tokenInfo = memberService.login(loginId, password);
-        return tokenInfo;
-}
->>>>>>> Stashed changes
 
     // 회원탈퇴
     @PostMapping("/delete")
@@ -95,7 +76,6 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-<<<<<<< Updated upstream
     private final EmailService emailService;
 
     // 이메일 인증
@@ -105,14 +85,6 @@ public class UserController {
         String authCode = emailService.sendEmail(emailDto.getEmail());
         // 인증코드를 그대로 반환하는거?
         return authCode;
-=======
-    // 이메일 인증
-    @PostMapping("/login/mailConfirm")
-    public ResponseEntity mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
-
-        emailService.sendEmail(emailDto.getEmail());
-        return new ResponseEntity(HttpStatus.OK);
->>>>>>> Stashed changes
     }
 
     // 비밀번호 재설정
