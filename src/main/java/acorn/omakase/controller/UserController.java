@@ -81,7 +81,7 @@ public class UserController {
     // 이메일 인증
     @PostMapping("/login/mailConfirm")
     public String mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
-
+        // test
         String authCode = emailService.sendEmail(emailDto.getEmail());
         // 인증코드를 그대로 반환하는거?
         return authCode;
