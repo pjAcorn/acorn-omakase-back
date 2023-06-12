@@ -1,4 +1,4 @@
-# acorn-omakase-back
+# acorn-omakase-back 1
 
 ## Description
 7명의 멤버가 프론트, 백에 한정되지 않고 기능에 맞춰 유연하게 진행한 프로젝트입니다.

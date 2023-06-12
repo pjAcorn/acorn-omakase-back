@@ -6,7 +6,6 @@ import acorn.omakase.domain.User;
 import acorn.omakase.dto.userdto.*;
 import acorn.omakase.service.user.EmailService;
 import acorn.omakase.service.user.UserService;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
-@Transactional
 public class UserController {
 
     private final UserService userService;
@@ -31,7 +29,7 @@ public class UserController {
         return new ResponseEntity(userList, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "회원가입")
+
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestBody SignupRequest signupRequest) {
         userService.signup(signupRequest);
@@ -39,7 +37,7 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @ApiOperation(value = "아이디 찾기")
+
     @PostMapping("/find/id")
     public ResponseEntity findId(@RequestBody FindIdRequest findIdRequest){
         String id = userService.findId(findIdRequest);
@@ -55,17 +53,24 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+
     // 로그인
+
     @PostMapping("/login")
-<<<<<<< Updated upstream
+
     public ResponseEntity login(@RequestBody LoginRequest loginRequest) throws Exception {
+
+        String userId = userService.login(loginRequest);
+
+        return new ResponseEntity(userId, HttpStatus.OK);
+
         User userId = userService.login(loginRequest);
-=======
+
     public ResponseEntity<LoginResponse> login(@Validated @RequestBody LoginRequest loginRequest) {
         LoginResponse loginResponse = userService.login(loginRequest);
         return new ResponseEntity<>(loginResponse, HttpStatus.OK);
     }
->>>>>>> Stashed changes
+
 
     // 로그아웃
     @GetMapping("/logout")
@@ -78,7 +83,26 @@ public class UserController {
         userService.logout(accessToken, refreshToken);
 
         return new ResponseEntity<>(new ApiResponse(SuccessCode.LOGOUT), HttpStatus.OK);
+
     }
+
+//    @PostMapping("/login")
+//    public ResponseEntity login(@RequestBody LoginRequest loginRequest) throws Exception {
+//        User userId = userService.login(loginRequest);
+//
+//        return new ResponseEntity(userId, HttpStatus.OK);
+//    }
+
+    // 로그인 ( 토큰 발급 )
+    @PostMapping("/login")
+    public TokenInfo login(@RequestBody LoginRequest loginRequest) {
+
+        String loginId = loginRequest.getLoginId();
+        String password = loginRequest.getPassword();
+        TokenInfo tokenInfo = memberService.login(loginId, password);
+        return tokenInfo;
+}
+
 
     // 회원탈퇴
     @PostMapping("/delete")
@@ -95,6 +119,7 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+
     private final EmailService emailService;
 
     // 이메일 인증
@@ -103,7 +128,18 @@ public class UserController {
 
         emailService.sendEmail(emailDto.getEmail());
         // 인증코드를 그대로 반환하는거?
+
+        return authCode;
+
+    // 이메일 인증
+    @PostMapping("/login/mailConfirm")
+    public ResponseEntity mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
+
+        emailService.sendEmail(emailDto.getEmail());
         return new ResponseEntity(HttpStatus.OK);
+
+        return new ResponseEntity(HttpStatus.OK);
+
     }
 
     // 비밀번호 재설정

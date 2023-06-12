@@ -2,16 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="acorn.omakase.repository.UserMapper">
 
-    <select id="getUserList" resultType="acorn.omakase.domain.User">
-        SELECT * FROM user
-        ORDER by name asc
-    </select>
 
+    <!-- 회원 가입 -->
     <insert id="signup" parameterType="acorn.omakase.domain.User" useGeneratedKeys="true"
             keyProperty="userId" keyColumn="user_id">
         INSERT INTO USER (login_id, name, password, email, region, nickname)
         VALUES (#{loginId}, #{name}, #{password}, #{email}, #{region}, #{nickname})
     </insert>
+
+<!--    &lt;!&ndash; 로그인 &ndash;&gt;-->
+<!--    <select id="login" parameterType="acorn.omakase.domain.User" resultType="int">-->
+<!--        SELECT COUNT(*)-->
+<!--        FROM USER-->
+<!--        WHERE login_id = #{loginId} AND password = #{password}-->
+<!--    </select>-->
 
     <!--회원 아이디 찾기-->
     <select id="findId" parameterType="acorn.omakase.dto.userdto.FindIdRequest" resultType="String">
@@ -23,8 +27,8 @@
         SELECT COUNT(password) FROM USER WHERE login_id=#{loginId}
     </select>
 
-    <select id="login" parameterType="acorn.omakase.domain.User" resultType="acorn.omakase.domain.User">
-        SELECT COUNT(*)
+    <select id="login" parameterType="acorn.omakase.domain.User" resultType="int">
+        SELECT count(*)
         FROM USER
         WHERE login_id = #{loginId} AND password = #{password}
     </select>
@@ -32,7 +36,6 @@
     <!--회원 암호 가져오기-->
     <select id="getPw" parameterType="acorn.omakase.domain.User" resultType="String">
         SELECT password FROM USER WHERE user_id = #{userId}
-
     </select>
 
     <!--회원 탈퇴-->
@@ -49,7 +52,12 @@
 
     <update id="resetPw" parameterType="acorn.omakase.dto.userdto.ResetPwRequest">
         UPDATE USER
-        SET password = #{pw1}
+        SET password = #{pw}
         where login_id = #{loginId}
     </update>
+
+    <!--회원 정보 가져오기-->
+    <select id="findById" parameterType="acorn.omakase.domain.User" resultType="acorn.omakase.domain.User">
+        SELECT * FROM USER WHERE user_id = #{userId}
+    </select>
 </mapper>

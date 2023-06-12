@@ -3,10 +3,14 @@ package acorn.omakase.service.user;
 import acorn.omakase.domain.User;
 import acorn.omakase.dto.userdto.*;
 import acorn.omakase.repository.UserMapper;
+import acorn.omakase.token.TokenProvider;
+import acorn.omakase.token.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
-
 import lombok.extern.slf4j.Slf4j;
-
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +23,11 @@ import java.util.Optional;
 @Transactional
 public class UserService {
 
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisUtil redisUtil;
     private final UserMapper userMapper;
+    private final BCryptPasswordEncoder encoder;
+    private final TokenProvider tokenProvider;
 
     public List<User> getUserList() {
 
@@ -30,6 +37,8 @@ public class UserService {
     public void signup(SignupRequest signupRequest) {
 
         User user = User.of(signupRequest);
+
+        user.encodingPassword(encoder.encode(user.getPassword()));
         userMapper.signup(user);
     }
 
@@ -56,27 +65,75 @@ public class UserService {
             throw new IllegalStateException("인증번호 불일치");
         }
 
-
         int pwChk = userMapper.findPw(findPwRequest);
 
         if(!(pwChk>0)){
             throw new IllegalStateException("가입된 정보가 없습니다.");
         }
-
-
-
     }
 
-    public User login(LoginRequest loginRequest) throws Exception {
-        User userId = userMapper.login(loginRequest);
+<<<<<<< Updated upstream
 
-        if (userId == null) {
+//    public int login(LoginRequest loginRequest) throws Exception {
+//        int userExists = userMapper.login(loginRequest);
+//        String userId = loginRequest.getLoginId();
+//        if(userExists == 0) {
+//            throw new Exception("아이디/비밀번호가 일치하지 않습니다.");
+//        }
+//        return userExists;
+//    }
+
+    public LoginResponse login(LoginRequest loginRequest) {
+
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(loginRequest.getLoginId(), loginRequest.getPassword());
+
+        Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        User user = findById(Long.valueOf(authenticate.getName()));
+        TokenResponse tokenResponse = tokenProvider.generateTokenDto(authenticate);
+        redisUtil.setDataExpire(authenticate.getName(), tokenResponse.getRefreshToken(), 1000 * 60 * 60 * 24 * 7);
+
+        LoginResponse loginResponse = new LoginResponse(user.getUserId(), user.getNickname(), tokenResponse);
+        return loginResponse;
+=======
+    public String login(LoginRequest loginRequest) throws Exception {
+        int userExists = userMapper.login(loginRequest);
+        String userId = loginRequest.getLoginId();
+        if(userExists == 0) {
             throw new Exception("아이디/비밀번호가 일치하지 않습니다.");
         }
         return userId;
+>>>>>>> Stashed changes
     }
 
+    public User findById(Long userId){
+        return userMapper.findById(userId);
+    }
 
+    // 로그아웃
+    public void logout(String accessToken, String refreshToken) throws Exception {
+        // 1. 검증
+        if (!tokenProvider.validateToken(refreshToken)) {
+            throw new Exception("인가 실패");
+        }
+
+        // 2. Access Token 에서 User ID 가져오기
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+        String userId = authentication.getName();
+
+        // 3. Redis 에서 해당 ID 로 저장된 Refresh Token 이 있는지 여부 확인 후 삭제
+        String findRefreshToken = redisUtil.getData(userId);
+        if (findRefreshToken != null) {
+            redisUtil.deleteData(userId);
+        }
+        // 남은 유효시간
+        Long expiration = tokenProvider.getExpiration(accessToken);
+
+        // 4. 해당 Access Token 저장
+        redisUtil.setDataExpire(accessToken, "logout", expiration);
+    }
+    
     // 회원 탈퇴
     public void delete(DeleteIdRequest deleteIdRequest) {
         DeleteIdRequest deleteUser = deleteIdRequest;
@@ -110,6 +167,7 @@ public class UserService {
         }
     }
 
+    // 비밀번호 변경
     public void resetPw(ResetPwRequest resetPwRequest){
         String pw1 = resetPwRequest.getPw1();
         String pw2 = resetPwRequest.getPw2();
@@ -118,6 +176,7 @@ public class UserService {
             throw new IllegalStateException("두 비밀번호가 일치하지 않습니다.");
         }
 
+        resetPwRequest.encodingPassword(encoder.encode(resetPwRequest.getPw1()));
         userMapper.resetPw(resetPwRequest);
     }
 }

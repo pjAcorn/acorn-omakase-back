@@ -3,6 +3,7 @@ package acorn.omakase.service.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
@@ -13,6 +14,7 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class EmailService {
     private final JavaMailSender emailSender;
     private final SpringTemplateEngine templateEngine;
@@ -61,7 +63,7 @@ public class EmailService {
     }
 
     //실제 메일 전송
-    public String sendEmail(String toEmail) throws MessagingException, UnsupportedEncodingException {
+    public void sendEmail(String toEmail) throws MessagingException, UnsupportedEncodingException {
 
         //메일전송에 필요한 정보 설정
         MimeMessage emailForm = createEmailForm(toEmail);
@@ -69,7 +71,7 @@ public class EmailService {
         emailSender.send(emailForm);
 
         redisUtil.setDataExpire(authNum, toEmail , 60*5L);
-        return authNum; //인증 코드 반환
+
     }
 
     //타임리프를 이용한 context 설정

@@ -20,7 +20,7 @@ public interface UserMapper {
 
     int findPw(FindPwRequest findPw);
 
-    User login(LoginRequest loginRequest);
+    int login(LoginRequest loginRequest);
 
     // 회원 탈퇴
     int deleteId(Long userId);
@@ -33,4 +33,7 @@ public interface UserMapper {
 
     // 비밀번호 변경
     int resetPw(ResetPwRequest resetPwRequest);
+
+    // 회원정보 가져오기
+    User findById(Long userId);
 }

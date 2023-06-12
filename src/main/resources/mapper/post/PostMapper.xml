@@ -9,15 +9,31 @@
     </insert>
 
     <update id="updatePost" parameterType="acorn.omakase.domain.Post">
-        update omakase.post set title = #{title}, content = #{content}, category = #{category} where postId = #{postId}
+        update omakase.post set title = #{title}, content = #{content}, category = #{category} where post_id = #{postId}
     </update>
 
     <delete id="deletePost" parameterType="int">
-        delete from omakase.post where postId = #{postId}
+        delete from omakase.post where post_id = #{postId}
     </delete>
 
-    <select id="selectPostView" parameterType="int" resultType="map">
-        select * from omakase.post where postId = #{postId}
+    <select id="findById" parameterType="Long" resultType="acorn.omakase.dto.postdto.PostResponse">
+<!--        select
+        p.title,
+        p.content,
+        DATE_FORMAT(p.created_at, '%Y-%m-%d %H:%i') as created_at,
+        p.category,
+        u.nickname
+        from POST p
+        join user u
+        on p.user_id = u.user_id
+        where post_id = #{postId}-->
+
+        select u.nickname, p.*, c.*
+        from omakase.POST p
+        join omakase.user u ON p.user_id = u.user_id
+        join omakase.comment c on p.post_id = c.post_id
+        where post_id = #{postId}
+        order by p.created_at desc;
     </select>
 
     <select id="selectCategoryPostList" resultType="map" parameterType="String">
@@ -32,7 +48,7 @@
         DATE_FORMAT(p.created_at, '%Y-%m-%d %H:%i') as created_at,
         u.nickname
         from POST p
-        join USER u
+        join user u
         ON p.user_id = u.user_id
         order by p.created_at desc
 

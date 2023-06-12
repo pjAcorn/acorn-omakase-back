@@ -2,6 +2,7 @@ package acorn.omakase.repository;
 
 import acorn.omakase.domain.Post;
 import acorn.omakase.dto.postdto.NewestPostDto;
+import acorn.omakase.dto.postdto.PostResponse;
 import acorn.omakase.dto.postdto.SearchDto;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,7 +17,7 @@ public interface PostMapper {
 
     void deletePost(Object postId);
 
-    List<Post> selectPostView(Object postId);
+    PostResponse findById(Long postId);
 
     List<NewestPostDto> findPostListByNewest();
 
