@@ -24,8 +24,13 @@
     </update>
 
     <!-- 댓글 리스트 -->
-    <select id="selectCommentList" resultType="map" parameterType="int">
-        select content, nickname, createdAt, updatedAt from omakase.comment where post_id = #{postId} order by created_at asc
+    <select id="selectCommentList" resultType="map" parameterType="long">
+        select c.comment_id, c.content, u.nickname, c.created_at, c.updated_at, c.like_count
+        from omakase.comment c
+        join user u
+        on c.user_id = u.user_id
+        where post_id = #{postId}
+        order by created_at asc
     </select>
 
 </mapper>

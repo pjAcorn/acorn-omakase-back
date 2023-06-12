@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -53,16 +55,16 @@ public class CommentController {
     }
 
 
-    //    댓글 리스트(페이징 없는 버전으로 포스트에서 작성 중)
-    @GetMapping("/list/{postId}")
-    public ResponseEntity commentList(
-            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "0") int pageNum,
-            @PathVariable Long postId
-    ){
-        PageHelper.startPage(pageNum, pageSize);
-        PageInfo<commentListDTO> commentListDTOPageInfo = PageInfo.of(commentService.commentList(postId));
+//    @GetMapping("/list/{postId}")
+//    public ResponseEntity commentList(
+//            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+//            @RequestParam(value = "pageNum", required = false, defaultValue = "0") int pageNum,
+//            @PathVariable Long postId
+//    ){
+//        PageHelper.startPage(pageNum, pageSize);
+//        PageInfo<commentListDTO> commentListDTOPageInfo = PageInfo.of(commentService.commentList(postId));
+//
+//        return new ResponseEntity(commentListDTOPageInfo, HttpStatus.OK);
+//    }
 
-        return new ResponseEntity(commentListDTOPageInfo, HttpStatus.OK);
-    }
 }
