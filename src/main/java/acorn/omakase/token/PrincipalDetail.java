@@ -1,4 +1,4 @@
-package acorn.omakase.token.dto;
+package acorn.omakase.token;
 
 
 import acorn.omakase.domain.User;

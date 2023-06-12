@@ -7,14 +7,11 @@ import acorn.omakase.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -56,7 +53,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequest loginRequest) throws Exception {
-        String userId = userService.login(loginRequest);
+        LoginResponse userId = userService.login(loginRequest);
 
         return new ResponseEntity(userId, HttpStatus.OK);
     }
@@ -80,11 +77,11 @@ public class UserController {
 
     // 이메일 인증
     @PostMapping("/login/mailConfirm")
-    public String mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
-        // test
-        String authCode = emailService.sendEmail(emailDto.getEmail());
-        // 인증코드를 그대로 반환하는거?
-        return authCode;
+    public ResponseEntity mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
+
+        emailService.sendEmail(emailDto.getEmail());
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     // 비밀번호 재설정

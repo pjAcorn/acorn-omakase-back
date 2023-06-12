@@ -1,10 +1,15 @@
 package acorn.omakase.domain;
 
-import acorn.omakase.dto.userdto.DeleteIdRequest;
 import acorn.omakase.dto.userdto.FindIdRequest;
 import acorn.omakase.dto.userdto.IdValidateRequest;
 import acorn.omakase.dto.userdto.SignupRequest;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,6 +34,9 @@ public class User {
         this.nickname = nickname;
     }
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     public static User of(SignupRequest signupRequest) {
         return User.builder()
                 .loginId(signupRequest.getLoginId())
@@ -48,5 +56,9 @@ public class User {
     public static User of(IdValidateRequest idValidateRequest){
         return User.builder()
                 .loginId(idValidateRequest.getLoginId()).build();
+    }
+
+    public void encodingPassword(String password) {
+        this.password = password;
     }
 }

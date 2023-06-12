@@ -65,17 +65,12 @@ public class UserService {
             throw new IllegalStateException("인증번호 불일치");
         }
 
-
         int pwChk = userMapper.findPw(findPwRequest);
 
         if(!(pwChk>0)){
             throw new IllegalStateException("가입된 정보가 없습니다.");
         }
-
-
-
     }
-
 
 //    public int login(LoginRequest loginRequest) throws Exception {
 //        int userExists = userMapper.login(loginRequest);
@@ -92,8 +87,9 @@ public class UserService {
                 new UsernamePasswordAuthenticationToken(loginRequest.getLoginId(), loginRequest.getPassword());
 
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
+        System.out.println("2");
         User user = findById(Long.valueOf(authenticate.getName()));
+        System.out.println("3");
         TokenResponse tokenResponse = tokenProvider.generateTokenDto(authenticate);
         redisUtil.setDataExpire(authenticate.getName(), tokenResponse.getRefreshToken(), 1000 * 60 * 60 * 24 * 7);
 

@@ -32,9 +32,6 @@ spring:
           ssl:
             trust: smtp.naver.com
             enable: true
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
 
   redis:
     host: 127.0.0.1
