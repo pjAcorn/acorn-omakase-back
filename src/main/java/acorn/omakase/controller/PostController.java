@@ -4,6 +4,7 @@ import acorn.omakase.domain.Post;
 import acorn.omakase.dto.commentDto.commentListDTO;
 import acorn.omakase.dto.postdto.*;
 import acorn.omakase.service.PostService;
+import acorn.omakase.service.post.CommentService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
+    private final CommentService commentService;
 
     // 새 글 쓰기
     @PostMapping("/new")
@@ -47,11 +49,18 @@ public class PostController {
     // 게시판 뷰
     @GetMapping("/{postId}")
     public ResponseEntity viewPost(
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+            @RequestParam(value = "pageNum", required = false, defaultValue = "0") int pageNum,
             @PathVariable Long postId
     ){
-        PostResponse postResponse = postService.viewPost(postId); // 작업 중
+        PostResponse postResponse = postService.viewPost(postId);
 
-        return new ResponseEntity(postResponse, HttpStatus.OK);
+        PageHelper.startPage(pageNum, pageSize);
+        PageInfo<commentListDTO> commentListDTOPageInfo = PageInfo.of(commentService.commentList(postId));
+
+        PostViewResponse postViewResponse = new PostViewResponse(postResponse, commentListDTOPageInfo);
+
+        return new ResponseEntity(postViewResponse, HttpStatus.OK);
     }
 
     // 게시판 리스트 최신순

@@ -17,23 +17,13 @@
     </delete>
 
     <select id="findById" parameterType="Long" resultType="acorn.omakase.dto.postdto.PostResponse">
-<!--        select
-        p.title,
-        p.content,
-        DATE_FORMAT(p.created_at, '%Y-%m-%d %H:%i') as created_at,
-        p.category,
-        u.nickname
-        from POST p
-        join user u
-        on p.user_id = u.user_id
-        where post_id = #{postId}-->
-
-        select u.nickname, p.*, c.*
+        select
+        p.post_id, p.title, p.content, p.created_at, p.category, u.nickname
         from omakase.POST p
-        join omakase.user u ON p.user_id = u.user_id
-        join omakase.comment c on p.post_id = c.post_id
-        where post_id = #{postId}
+        join omakase.user u on p.user_id = u.user_id
+        where p.post_id = #{postId}
         order by p.created_at desc;
+
     </select>
 
     <select id="selectCategoryPostList" resultType="map" parameterType="String">

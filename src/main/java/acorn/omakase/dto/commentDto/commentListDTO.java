@@ -5,12 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Getter
 @AllArgsConstructor
 public class commentListDTO extends SearchDto {
+    private Long commentId;
     private String content;
     private String nickname;
-    private Date createdAt;
-    private Date updatedAt;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
+    private Long likeCount;
 }
