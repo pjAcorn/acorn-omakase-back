@@ -60,16 +60,13 @@ public class UserService {
             throw new IllegalStateException("인증번호 불일치");
         }
 
-
         int pwChk = userMapper.findPw(findPwRequest);
 
         if(!(pwChk>0)){
             throw new IllegalStateException("가입된 정보가 없습니다.");
         }
-
-
-
     }
+
 
     public LoginResponse login(LoginRequest loginRequest) {
 
@@ -79,10 +76,13 @@ public class UserService {
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         User user = findById(Long.valueOf(authenticate.getName()));
+
         TokenResponse tokenResponse = tokenProvider.generateTokenDto(authenticate);
+
         redisUtil.setDataExpire(authenticate.getName(), tokenResponse.getRefreshToken(), 1000 * 60 * 60 * 24 * 7);
 
         LoginResponse loginResponse = new LoginResponse(user.getUserId(), user.getNickname(), tokenResponse);
+
         return loginResponse;
     }
 
@@ -136,10 +136,9 @@ public class UserService {
     }
 
     // 아이디 중복 확인
-    public void idValidate(IdValidateRequest idValidateRequest) {
-        User idChk = User.of(idValidateRequest);
+    public void idChk(IdChkRequest idChkRequest) {
 
-        int check = userMapper.idValidate(idChk);
+        int check = userMapper.idChk(idChkRequest);
 
         if (check > 0) {
             throw new IllegalStateException("중복된 아이디 입니다.");

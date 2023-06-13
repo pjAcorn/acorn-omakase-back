@@ -1,9 +1,13 @@
 package acorn.omakase.domain.user;
 
-import acorn.omakase.dto.userdto.FindIdRequest;
-import acorn.omakase.dto.userdto.IdValidateRequest;
 import acorn.omakase.dto.userdto.SignupRequest;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,7 +20,7 @@ public class User {
     private String email;
     private String region;
     private String nickname;
-    private Role role;
+//    private Role role;
 
     @Builder
     public User(Long userId, String loginId, String name, String password, String email, String region, String nickname) {
@@ -30,6 +34,9 @@ public class User {
         this.role = Role.ROLE_USER;
     }
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     public static User of(SignupRequest signupRequest) {
         return User.builder()
                 .loginId(signupRequest.getLoginId())
@@ -40,12 +47,6 @@ public class User {
                 .region(signupRequest.getRegion()).build();
     }
 
-    public static User of(IdValidateRequest idValidateRequest){
-        return User.builder()
-                .loginId(idValidateRequest.getLoginId()).build();
-    }
-
-    //      패스워드 인코딩
     public void encodingPassword(String password) {
         this.password = password;
     }
