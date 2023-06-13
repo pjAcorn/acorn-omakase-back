@@ -1,7 +1,5 @@
 package acorn.omakase.domain;
 
-import acorn.omakase.dto.userdto.FindIdRequest;
-import acorn.omakase.dto.userdto.IdValidateRequest;
 import acorn.omakase.dto.userdto.SignupRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -32,6 +30,7 @@ public class User {
         this.email = email;
         this.region = region;
         this.nickname = nickname;
+        this.role = Role.ROLE_USER;
     }
 
     @Enumerated(EnumType.STRING)
@@ -45,17 +44,6 @@ public class User {
                 .email(signupRequest.getEmail())
                 .name(signupRequest.getName())
                 .region(signupRequest.getRegion()).build();
-    }
-
-    public static User of(FindIdRequest findIdRequest) {
-        return User.builder()
-                .email(findIdRequest.getEmail())
-                .name(findIdRequest.getName()).build();
-    }
-
-    public static User of(IdValidateRequest idValidateRequest){
-        return User.builder()
-                .loginId(idValidateRequest.getLoginId()).build();
     }
 
     public void encodingPassword(String password) {

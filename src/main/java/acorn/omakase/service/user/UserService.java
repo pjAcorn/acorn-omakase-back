@@ -85,15 +85,21 @@ public class UserService {
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginRequest.getLoginId(), loginRequest.getPassword());
-
+        System.out.println("authenticationToken.getCredentials() : "+ authenticationToken.getCredentials());
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         System.out.println("2");
+        System.out.println("getAuthorities : " + authenticate.getAuthorities());
+        System.out.println("getPrincipal : " + authenticate.getPrincipal());
+        System.out.println("getCredentials : " + authenticate.getCredentials());
         User user = findById(Long.valueOf(authenticate.getName()));
         System.out.println("3");
+        System.out.println("userId : "+ user.getUserId());
         TokenResponse tokenResponse = tokenProvider.generateTokenDto(authenticate);
+        System.out.println("4");
         redisUtil.setDataExpire(authenticate.getName(), tokenResponse.getRefreshToken(), 1000 * 60 * 60 * 24 * 7);
-
+        System.out.println("5");
         LoginResponse loginResponse = new LoginResponse(user.getUserId(), user.getNickname(), tokenResponse);
+        System.out.println("6");
         return loginResponse;
     }
 
@@ -147,10 +153,9 @@ public class UserService {
     }
 
     // 아이디 중복 확인
-    public void idValidate(IdValidateRequest idValidateRequest) {
-        User idChk = User.of(idValidateRequest);
+    public void idChk(IdChkRequest idChkRequest) {
 
-        int check = userMapper.idValidate(idChk);
+        int check = userMapper.idChk(idChkRequest);
 
         if (check > 0) {
             throw new IllegalStateException("중복된 아이디 입니다.");

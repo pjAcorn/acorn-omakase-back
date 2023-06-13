@@ -66,9 +66,9 @@ public class UserController {
     }
 
     // 아이디 중복 확인
-    @PostMapping("/idValidation")
-    public ResponseEntity IdValidation(@RequestBody IdValidateRequest idValidateRequest){
-        userService.idValidate(idValidateRequest);
+    @PostMapping("/idChk")
+    public ResponseEntity IdChk(@RequestBody IdChkRequest idChkRequest){
+        userService.idChk(idChkRequest);
 
         return new ResponseEntity(HttpStatus.OK);
     }

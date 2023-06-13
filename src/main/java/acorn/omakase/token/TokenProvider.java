@@ -43,24 +43,26 @@ public class TokenProvider {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-
+        System.out.println("generateTokenDto done");
         long now = (new Date()).getTime();
 
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        System.out.println("accessTokenExpiresIn");
+
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())           // payload "sub": "name"
                 .claim(AUTHORITIES_KEY, authorities)            // payload "auth": "ROLE_USER"
                 .setExpiration(accessTokenExpiresIn)            // payload "exp": 1516239022 (예시)
                 .signWith(key, SignatureAlgorithm.HS512)        // header "alg": "HS512"
                 .compact();
-
+        System.out.println("accessToken");
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
                 .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
-
+        System.out.println("refreshToken");
         return TokenResponse.builder()
                 .accessToken(accessToken)
                 .accessTokenExpiresIn(accessTokenExpiresIn.getTime())

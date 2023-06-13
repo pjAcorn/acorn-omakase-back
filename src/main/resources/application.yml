@@ -54,4 +54,4 @@ pagehelper:
   default-count: true
 
 jwt:
-  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+  secret: b21ha2FzZS1ob250b25pLWRhaXNraS1kZXRoLXdlLWhhdmUtYnJpZ2h0LWZ1dHVyZS1pc250LWl0LWRyZWFtc2hhZGUtZGVsdWhpLW1hdmVyaWNrLWRlYWRhaGVhZC1yZXNpc3RhbmNl
