@@ -18,12 +18,11 @@
 
     <select id="findById" parameterType="Long" resultType="acorn.omakase.dto.postdto.PostResponse">
         select
-        p.post_id, p.title, p.content, p.created_at, p.category, u.nickname
+        p.post_id, p.title, p.content, DATE_FORMAT(p.created_at, '%Y-%m-%d %H:%i:%s') as created_at, p.category, u.nickname
         from omakase.POST p
         join omakase.user u on p.user_id = u.user_id
         where p.post_id = #{postId}
         order by p.created_at desc;
-
     </select>
 
     <select id="selectCategoryPostList" resultType="map" parameterType="String">
@@ -35,7 +34,7 @@
             resultType="map">
         select p.post_id,
         p.title,
-        DATE_FORMAT(p.created_at, '%Y-%m-%d %H:%i') as created_at,
+        DATE_FORMAT(p.created_at, '%Y-%m-%d %H:%i:%s') as created_at,
         u.nickname
         from POST p
         join user u
@@ -49,4 +48,5 @@
         SELECT COUNT(*)
         FROM POST
     </select>
+
 </mapper>

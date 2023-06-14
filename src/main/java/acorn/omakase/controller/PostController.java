@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -60,7 +61,14 @@ public class PostController {
 
         PageHelper.startPage(pageNum, pageSize);
         PageInfo<commentListDTO> commentListDTOPageInfo = PageInfo.of(commentService.commentList(postId));
-        PostViewResponse postViewResponse = new PostViewResponse(postResponse, commentListDTOPageInfo);
+
+
+        List comment = new ArrayList();
+        for(int i=0;i<commentListDTOPageInfo.getSize();i++){
+            comment.add(i, commentListDTOPageInfo.getList().get(i));
+        }
+
+        PostViewResponse postViewResponse = new PostViewResponse(postResponse, comment);
 
         return new ResponseEntity(postViewResponse, HttpStatus.OK);
     }

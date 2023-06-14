@@ -24,4 +24,5 @@ public interface PostMapper {
     int count(SearchDto params);
 
     List<Post> selectCategoryPostList(Object category);
+
 }
