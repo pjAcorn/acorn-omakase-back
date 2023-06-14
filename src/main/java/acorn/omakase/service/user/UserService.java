@@ -1,5 +1,7 @@
 package acorn.omakase.service.user;
 
+import acorn.omakase.common.code.ErrorCode;
+import acorn.omakase.common.exception.CustomIllegalStateException;
 import acorn.omakase.domain.user.User;
 import acorn.omakase.dto.userdto.*;
 import acorn.omakase.repository.UserMapper;
@@ -57,7 +59,7 @@ public class UserService {
         String redisEmail = redisUtil.getData(findPwRequest.getCode());
 
         if(!email.equals(redisEmail)){
-            throw new IllegalStateException("인증번호 불일치");
+            throw new CustomIllegalStateException(ErrorCode.INVALID_TOKEN);
         }
 
         int pwChk = userMapper.findPw(findPwRequest);
