@@ -11,6 +11,5 @@ import lombok.Setter;
 public class NewPostRequest {
     private String title;
     private String content;
-    private Long userId;
     private String category;
 }

@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class IdValidateRequest {
+public class IdChkRequest {
     private String loginId;
 }

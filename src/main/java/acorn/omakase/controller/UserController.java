@@ -1,6 +1,5 @@
 package acorn.omakase.controller;
 
-import acorn.omakase.domain.user.User;
 import acorn.omakase.dto.userdto.*;
 import acorn.omakase.service.user.EmailService;
 import acorn.omakase.service.user.UserService;
@@ -10,9 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,6 +44,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequest loginRequest) throws Exception {
+
         LoginResponse loginResponse = userService.login(loginRequest);
 
         return new ResponseEntity(loginResponse, HttpStatus.OK);
@@ -60,9 +58,9 @@ public class UserController {
     }
 
     // 아이디 중복 확인
-    @PostMapping("/idValidation")
-    public ResponseEntity IdValidation(@RequestBody IdValidateRequest idValidateRequest){
-        userService.idValidate(idValidateRequest);
+    @PostMapping("/idChk")
+    public ResponseEntity IdChk(@RequestBody IdChkRequest idChkRequest){
+        userService.idChk(idChkRequest);
 
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -74,6 +72,7 @@ public class UserController {
     public ResponseEntity mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
 
         emailService.sendEmail(emailDto.getEmail());
+
         // 인증코드를 그대로 반환하는거?
         return new ResponseEntity(HttpStatus.OK);
     }

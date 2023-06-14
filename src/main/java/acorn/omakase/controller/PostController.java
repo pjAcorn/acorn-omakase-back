@@ -1,5 +1,7 @@
 package acorn.omakase.controller;
 
+import acorn.omakase.common.code.SuccessCode;
+import acorn.omakase.common.response.ApiResponse;
 import acorn.omakase.domain.Post;
 import acorn.omakase.dto.commentDto.commentListDTO;
 import acorn.omakase.dto.postdto.*;
@@ -26,10 +28,11 @@ public class PostController {
 
     // 새 글 쓰기
     @PostMapping("/new")
-    public ResponseEntity addPost(@RequestBody NewPostRequest newPostRequest){
-        postService.addPost(newPostRequest);
+    public ResponseEntity addPost(@RequestBody NewPostRequest newPostRequest,
+                                  @RequestHeader(value = "Authorization") String acTokenRequest){
+        postService.addPost(newPostRequest, acTokenRequest);
 
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity(new ApiResponse(SuccessCode.CREATE_SUCCESS), HttpStatus.CREATED);
     }
 
     // 글 수정
@@ -59,6 +62,7 @@ public class PostController {
         PageHelper.startPage(pageNum, pageSize);
         PageInfo<commentListDTO> commentListDTOPageInfo = PageInfo.of(commentService.commentList(postId));
 
+
         List comment = new ArrayList();
         for(int i=0;i<commentListDTOPageInfo.getSize();i++){
             comment.add(i, commentListDTOPageInfo.getList().get(i));
@@ -82,10 +86,5 @@ public class PostController {
     }
 
 
-//    @GetMapping("/list_category")
-//    public ResponseEntity listCategoryPost(@RequestBody Object category){
-//        List<Post> categoryPostList = postService.listCategoryPost(category);
-//
-//        return new ResponseEntity(categoryPostList, HttpStatus.OK);
-//    }
+
 }

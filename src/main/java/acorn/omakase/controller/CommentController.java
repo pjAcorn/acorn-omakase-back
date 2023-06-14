@@ -1,19 +1,13 @@
 package acorn.omakase.controller;
 
-import acorn.omakase.dto.commentDto.commentListDTO;
 import acorn.omakase.dto.commentDto.modCommentRequest;
 import acorn.omakase.dto.commentDto.newCommentRequest;
-import acorn.omakase.dto.postdto.NewestPostDto;
 import acorn.omakase.service.post.CommentService;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -53,7 +47,6 @@ public class CommentController {
 
         return new ResponseEntity(HttpStatus.OK);
     }
-
 
 //    @GetMapping("/list/{postId}")
 //    public ResponseEntity commentList(
