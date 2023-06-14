@@ -5,9 +5,12 @@ import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @AllArgsConstructor
 public class PostViewResponse {
     private PostResponse post;
-    private PageInfo<commentListDTO> comment;
+//    private PageInfo<commentListDTO> commentPage;
+    private List comment;
 }

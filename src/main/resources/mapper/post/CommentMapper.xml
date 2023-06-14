@@ -25,7 +25,7 @@
 
     <!-- 댓글 리스트 -->
     <select id="selectCommentList" resultType="map" parameterType="long">
-        select c.comment_id, c.content, u.nickname, c.created_at, c.updated_at, c.like_count
+        select c.comment_id, c.content, u.nickname, DATE_FORMAT(c.created_at, '%Y-%m-%d %H:%i:%s') as created_at, DATE_FORMAT(c.updated_at, '%Y-%m-%d %H:%i:%s') as updated_at, c.like_count
         from omakase.comment c
         join user u
         on c.user_id = u.user_id
