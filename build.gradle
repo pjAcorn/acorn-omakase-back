@@ -41,6 +41,7 @@ dependencies {
 
 	//security
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.6.7'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 
 	//jwt
