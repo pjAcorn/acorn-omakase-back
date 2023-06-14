@@ -72,7 +72,7 @@ public class UserService {
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginRequest.getLoginId(), loginRequest.getPassword());
-
+        log.info("authenticationToken={}",authenticationToken);
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         User user = findById(Long.valueOf(authenticate.getName()));

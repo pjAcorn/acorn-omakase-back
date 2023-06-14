@@ -57,7 +57,6 @@ public class PostController {
 
         PageHelper.startPage(pageNum, pageSize);
         PageInfo<commentListDTO> commentListDTOPageInfo = PageInfo.of(commentService.commentList(postId));
-
         PostViewResponse postViewResponse = new PostViewResponse(postResponse, commentListDTOPageInfo);
 
         return new ResponseEntity(postViewResponse, HttpStatus.OK);
@@ -76,10 +75,5 @@ public class PostController {
     }
 
 
-//    @GetMapping("/list_category")
-//    public ResponseEntity listCategoryPost(@RequestBody Object category){
-//        List<Post> categoryPostList = postService.listCategoryPost(category);
-//
-//        return new ResponseEntity(categoryPostList, HttpStatus.OK);
-//    }
+
 }
