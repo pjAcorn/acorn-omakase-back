@@ -6,6 +6,7 @@ import acorn.omakase.repository.UserMapper;
 import acorn.omakase.token.TokenProvider;
 import acorn.omakase.token.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -79,7 +80,7 @@ public class UserService {
 
         TokenResponse tokenResponse = tokenProvider.generateTokenDto(authenticate);
 
-        redisUtil.setDataExpire(authenticate.getName(), tokenResponse.getRefreshToken(), 1000 * 60 * 60 * 24 * 7);
+        redisUtil.setDataExpire(authenticate.getName(), tokenResponse.getRefreshToken(), 60 * 60 * 24 * 7);
 
         LoginResponse loginResponse = new LoginResponse(user.getUserId(), user.getNickname(), tokenResponse);
 
@@ -91,10 +92,11 @@ public class UserService {
     }
 
     // 로그아웃
-    public void logout(String accessToken, String refreshToken) throws Exception {
+    @SneakyThrows
+    public void logout(String accessToken, String refreshToken) {
         // 1. 검증
         if (!tokenProvider.validateToken(refreshToken)) {
-            throw new Exception("인가 실패");
+            throw new IllegalStateException("INVALID_TOKEN");
         }
 
         // 2. Access Token 에서 User ID 가져오기
@@ -157,4 +159,36 @@ public class UserService {
         resetPwRequest.encodingPassword(encoder.encode(resetPwRequest.getPw1()));
         userMapper.resetPw(resetPwRequest);
     }
+
+    @SneakyThrows
+    public TokenResponse reissue(String accessToken, String refreshToken) {
+        // 1. 검증
+        if (!tokenProvider.validateToken(refreshToken)) {
+            throw new IllegalStateException("INVALID_TOKEN");
+        }
+
+        // 2. Access Token 에서 User ID 가져오기
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+        String userId = authentication.getName();
+
+        // 3. 저장소에서 User ID 를 기반으로 Refresh Token 값 가져오기
+        String findRefreshToken = redisUtil.getData(userId);
+        if (findRefreshToken == null) {
+            throw new IllegalStateException("INVALID_TOKEN");
+        }
+
+        // 4. Refresh Token 일치하는지 검사
+        if (!refreshToken.equals(findRefreshToken)) {
+            throw new IllegalStateException("NO_MATCHES_INFO");
+        }
+
+        // 5. 새로운 토큰 생성
+        TokenResponse tokenResponse = tokenProvider.generateTokenDto(authentication);
+
+        // 6. 저장소 정보 업데이트
+        redisUtil.setDataExpire(userId, tokenResponse.getRefreshToken(), 1000 * 60 * 60 * 24 * 7);
+
+        return tokenResponse;
+    }
+
 }
