@@ -4,22 +4,32 @@ package acorn.omakase.service;
 import acorn.omakase.domain.Post;
 import acorn.omakase.dto.postdto.*;
 import acorn.omakase.repository.PostMapper;
+import acorn.omakase.token.TokenProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class PostService {
     private final PostMapper postMapper;
+    private final TokenProvider tokenProvider;
 
-    public void addPost(NewPostRequest newPostRequest) {
+    @SneakyThrows
+    public void addPost(NewPostRequest newPostRequest, String acTokenRequest) {
+        String accessToken = acTokenRequest.substring(7);
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+        String strUserId = authentication.getName();
+        Long userId = Long.parseLong(strUserId);
+
         Post savePost = Post.ofNew(
-                newPostRequest.getTitle(), newPostRequest.getContent(), newPostRequest.getUserId(), newPostRequest.getCategory());
-
+                newPostRequest.getTitle(), newPostRequest.getContent(), userId, newPostRequest.getCategory());
         postMapper.insertPost(savePost);
     }
 
@@ -47,7 +57,29 @@ public class PostService {
         return postMapper.findPostListByNewest();
     }
 
+    public List<likePostDto> PostListByLike() {
+
+        return postMapper.findPostListByLike();
+    }
+
+    public List<viewPostDto> PostListByView() {
+
+        return postMapper.findPostListByView();
+    }
+
     public List<Post> listCategoryPost(Object category) {
         return postMapper.selectCategoryPostList(category);
+    }
+
+    public void likePost(Long postId) {
+        postMapper.updateLikePost(postId);
+    }
+
+    public void addViews(Long postId) {
+        postMapper.updateViews(postId);
+    }
+
+    public List<searchPostDto> searchPost(String keyword) {
+        return postMapper.findByKeyword(keyword);
     }
 }
