@@ -42,6 +42,7 @@ public class PostController {
 
         return new ResponseEntity(HttpStatus.OK);
     }
+
     // 글 삭제
     @DeleteMapping("/del")
     public ResponseEntity delPost(@RequestBody Object postId){
@@ -57,6 +58,8 @@ public class PostController {
             @RequestParam(value = "pageNum", required = false, defaultValue = "0") int pageNum,
             @PathVariable Long postId
     ){
+        postService.addViews(postId);
+
         PostResponse postResponse = postService.viewPost(postId);
 
         PageHelper.startPage(pageNum, pageSize);
@@ -85,6 +88,47 @@ public class PostController {
         return new ResponseEntity(newestPostDtoPageInfo, HttpStatus.OK);
     }
 
+    // 게시판 리스트 추천순
+    @GetMapping("/like")
+    public ResponseEntity likePostList(
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+            @RequestParam(value = "pageNum", required = false, defaultValue = "0") int pageNum
+    ) {
+        PageHelper.startPage(pageNum, pageSize);
+        PageInfo<likePostDto> likePostDtoPageInfo = PageInfo.of(postService.PostListByLike());
 
+        return new ResponseEntity(likePostDtoPageInfo, HttpStatus.OK);
+    }
 
+    // 게시판 리스트 조회순
+    @GetMapping("/view")
+    public ResponseEntity viewPostList(
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+            @RequestParam(value = "pageNum", required = false, defaultValue = "0") int pageNum
+    ) {
+        PageHelper.startPage(pageNum, pageSize);
+        PageInfo<viewPostDto> viewPostDtoPageInfo = PageInfo.of(postService.PostListByView());
+
+        return new ResponseEntity(viewPostDtoPageInfo, HttpStatus.OK);
+    }
+
+    // 게시물 좋아요
+    @PatchMapping("/like/{postId}")
+    public ResponseEntity likePost(@PathVariable Long postId){
+        postService.likePost(postId);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    // 게시판 제목 검색
+    @GetMapping("/search/{keyword}")
+    public ResponseEntity searchPost(
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+            @RequestParam(value = "pageNum", required = false, defaultValue = "0") int pageNum,
+            @PathVariable String keyword){
+        PageHelper.startPage(pageNum, pageSize);
+        PageInfo<searchPostDto> searchPostDtoPageInfo = PageInfo.of(postService.searchPost(keyword));
+
+        return new ResponseEntity(searchPostDtoPageInfo, HttpStatus.OK);
+    }
 }
