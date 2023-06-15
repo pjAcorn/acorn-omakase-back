@@ -1,7 +1,9 @@
 package acorn.omakase.controller;
 
+import acorn.omakase.common.code.SuccessCode;
+import acorn.omakase.common.response.ApiResponse;
 import acorn.omakase.dto.commentDto.modCommentRequest;
-import acorn.omakase.dto.commentDto.newCommentRequest;
+import acorn.omakase.dto.commentDto.NewCommentRequest;
 import acorn.omakase.service.post.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +20,11 @@ public class CommentController {
 
 //    새 댓글 쓰기
     @PostMapping("/new")
-    public ResponseEntity addComment(@RequestBody newCommentRequest newCommentRequest){
-        commentService.addComment(newCommentRequest);
+    public ResponseEntity addComment(@RequestBody NewCommentRequest newCommentRequest,
+                                     @RequestHeader(value = "Authorization") String acTokenRequest){
+        commentService.addComment(newCommentRequest, acTokenRequest);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(new ApiResponse(SuccessCode.CREATE_SUCCESS), HttpStatus.OK);
     }
 
 //    댓글 수정
@@ -48,16 +51,5 @@ public class CommentController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-//    @GetMapping("/list/{postId}")
-//    public ResponseEntity commentList(
-//            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-//            @RequestParam(value = "pageNum", required = false, defaultValue = "0") int pageNum,
-//            @PathVariable Long postId
-//    ){
-//        PageHelper.startPage(pageNum, pageSize);
-//        PageInfo<commentListDTO> commentListDTOPageInfo = PageInfo.of(commentService.commentList(postId));
-//
-//        return new ResponseEntity(commentListDTOPageInfo, HttpStatus.OK);
-//    }
 
 }

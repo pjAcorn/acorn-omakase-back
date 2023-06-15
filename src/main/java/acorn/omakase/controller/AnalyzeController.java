@@ -1,8 +1,6 @@
 package acorn.omakase.controller;
 
 import acorn.omakase.dto.analyzeDto.newAnalyzeRequest;
-import acorn.omakase.dto.commentDto.newCommentRequest;
-import acorn.omakase.service.AnalyzeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
