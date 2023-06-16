@@ -79,7 +79,7 @@ public class PostService {
         postMapper.updateViews(postId);
     }
 
-    public List<searchPostDto> searchPost(String keyword) {
+    public List<searchPostDto> searchPost(Object keyword) {
         return postMapper.findByKeyword(keyword);
     }
 }

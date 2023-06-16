@@ -121,11 +121,12 @@ public class PostController {
     }
 
     // 게시판 제목 검색
-    @GetMapping("/search/{keyword}")
+    @GetMapping("/search/keyword")
     public ResponseEntity searchPost(
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
             @RequestParam(value = "pageNum", required = false, defaultValue = "0") int pageNum,
-            @PathVariable String keyword){
+            @RequestBody Object keyword){
+
         PageHelper.startPage(pageNum, pageSize);
         PageInfo<searchPostDto> searchPostDtoPageInfo = PageInfo.of(postService.searchPost(keyword));
 
