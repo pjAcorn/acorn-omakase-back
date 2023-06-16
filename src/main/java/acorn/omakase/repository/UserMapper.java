@@ -37,4 +37,9 @@ public interface UserMapper {
 
     // 로그인 아이디로 회원정보 가져오기
     Optional<User> findByLoginId(String loginId);
+
+    int emailChk(EmailChkRequest emailChkRequest);
+
+    // 마이페이지
+    MyPageResponse myPage(Long userId);
 }

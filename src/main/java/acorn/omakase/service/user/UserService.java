@@ -46,27 +46,27 @@ public class UserService {
         String email = findIdRequest.getEmail();
         String redisEmail = redisUtil.getData(findIdRequest.getCode());
 
-        if (!email.equals(redisEmail)){
-            throw new IllegalStateException("인증번호 불일치");
+        if (!email.equals(redisEmail)) {
+            throw new CustomIllegalStateException(ErrorCode.INVALID_NUMBER);
         }
 
         return Optional.ofNullable(userMapper.findId(findIdRequest))
-                .orElseThrow(() -> new IllegalStateException("가입된 정보가 없습니다"));
+                .orElseThrow(() -> new CustomIllegalStateException(ErrorCode.NOT_FOUND_USER));
     }
 
     // 비밀번호 찾기
-    public void findPw(FindPwRequest findPwRequest){
+    public void findPw(FindPwRequest findPwRequest) {
         String email = findPwRequest.getEmail();
         String redisEmail = redisUtil.getData(findPwRequest.getCode());
 
-        if(!email.equals(redisEmail)){
+        if (!email.equals(redisEmail)) {
             throw new CustomIllegalStateException(ErrorCode.INVALID_TOKEN);
         }
 
         int pwChk = userMapper.findPw(findPwRequest);
 
-        if(!(pwChk>0)){
-            throw new IllegalStateException("가입된 정보가 없습니다.");
+        if (!(pwChk > 0)) {
+            throw new CustomIllegalStateException(ErrorCode.NOT_FOUND_USER);
         }
     }
 
@@ -75,7 +75,7 @@ public class UserService {
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginRequest.getLoginId(), loginRequest.getPassword());
-        log.info("authenticationToken={}",authenticationToken);
+        log.info("authenticationToken={}", authenticationToken);
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         User user = findById(Long.valueOf(authenticate.getName()));
@@ -89,7 +89,7 @@ public class UserService {
         return loginResponse;
     }
 
-    public User findById(Long userId){
+    public User findById(Long userId) {
         return userMapper.findById(userId);
     }
 
@@ -98,7 +98,7 @@ public class UserService {
     public void logout(String accessToken, String refreshToken) {
         // 1. 검증
         if (!tokenProvider.validateToken(refreshToken)) {
-            throw new IllegalStateException("INVALID_TOKEN");
+            throw new CustomIllegalStateException(ErrorCode.INVALID_TOKEN);
         }
 
         // 2. Access Token 에서 User ID 가져오기
@@ -116,7 +116,7 @@ public class UserService {
         // 4. 해당 Access Token 저장
         redisUtil.setDataExpire(accessToken, "logout", expiration);
     }
-    
+
     // 회원 탈퇴
     public void delete(DeleteIdRequest deleteIdRequest) {
         DeleteIdRequest deleteUser = deleteIdRequest;
@@ -132,10 +132,10 @@ public class UserService {
             if (password1.equals(password)) {
                 userMapper.deleteId(userId);
             } else {
-                throw new IllegalStateException("비밀번호가 회원 정보와 틀립니다.");
+                throw new CustomIllegalStateException(ErrorCode.NO_MATCHES_PASSWORD);
             }
         } else {
-            throw new IllegalStateException("입력한 두 비밀번호가 일치하지 않습니다.");
+            throw new CustomIllegalStateException(ErrorCode.NO_MATCHES_PASSWORD2);
         }
     }
 
@@ -145,17 +145,17 @@ public class UserService {
         int check = userMapper.idChk(idChkRequest);
 
         if (check > 0) {
-            throw new IllegalStateException("중복된 아이디 입니다.");
+            throw new CustomIllegalStateException(ErrorCode.DUPLICATE_LOGIN_ID);
         }
     }
 
     // 비밀번호 변경
-    public void resetPw(ResetPwRequest resetPwRequest){
+    public void resetPw(ResetPwRequest resetPwRequest) {
         String pw1 = resetPwRequest.getPw1();
         String pw2 = resetPwRequest.getPw2();
 
-        if(!pw1.equals(pw2)){
-            throw new IllegalStateException("두 비밀번호가 일치하지 않습니다.");
+        if (!pw1.equals(pw2)) {
+            throw new CustomIllegalStateException(ErrorCode.NO_MATCHES_PASSWORD2);
         }
 
         resetPwRequest.encodingPassword(encoder.encode(resetPwRequest.getPw1()));
@@ -166,7 +166,7 @@ public class UserService {
     public TokenResponse reissue(String accessToken, String refreshToken) {
         // 1. 검증
         if (!tokenProvider.validateToken(refreshToken)) {
-            throw new IllegalStateException("INVALID_TOKEN");
+            throw new CustomIllegalStateException(ErrorCode.INVALID_TOKEN);
         }
 
         // 2. Access Token 에서 User ID 가져오기
@@ -176,12 +176,12 @@ public class UserService {
         // 3. 저장소에서 User ID 를 기반으로 Refresh Token 값 가져오기
         String findRefreshToken = redisUtil.getData(userId);
         if (findRefreshToken == null) {
-            throw new IllegalStateException("INVALID_TOKEN");
+            throw new CustomIllegalStateException(ErrorCode.INVALID_TOKEN);
         }
 
         // 4. Refresh Token 일치하는지 검사
         if (!refreshToken.equals(findRefreshToken)) {
-            throw new IllegalStateException("NO_MATCHES_INFO");
+            throw new CustomIllegalStateException(ErrorCode.NO_MATCHES_INFO);
         }
 
         // 5. 새로운 토큰 생성
@@ -193,4 +193,15 @@ public class UserService {
         return tokenResponse;
     }
 
+    public void emailChk(EmailChkRequest emailChkRequest) {
+        int emailChk = userMapper.emailChk(emailChkRequest);
+        if (emailChk > 0) {
+            throw new CustomIllegalStateException(ErrorCode.DUPLICATE_EMAIL);
+        }
+    }
+
+    public MyPageResponse myPage(Long userId) {
+        MyPageResponse myPage = userMapper.myPage(userId);
+        return myPage;
+    }
 }
