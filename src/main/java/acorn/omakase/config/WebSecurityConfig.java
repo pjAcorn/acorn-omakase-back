@@ -44,7 +44,6 @@ public class WebSecurityConfig {
                 .and()
                 .headers().frameOptions().sameOrigin()
                 .and()// exception handling 할 때 우리가 만든 클래스를 추가
-
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
@@ -55,13 +54,13 @@ public class WebSecurityConfig {
                 // JwtFilter 를 addFilterBefore 로 등록했던 JwtSecurityConfig 클래스를 적용
                 .apply(new JwtSecurityConfig(tokenProvider, redisUtil))
                 .and()
-//                .apply(new JwtSecurityConfig(tokenProvider, redisUtil))
-//                .and()
                 .formLogin().disable()  //폼로그인 안쓰겠다
                 .httpBasic().disable()
                 .authorizeRequests()
+
                 .antMatchers("/", "/**", "/users/**", "/posts", "posts/{postId}", "/analyze/**").permitAll()
                 .anyRequest().permitAll()   // 나머지 API 는 전부 인증 필요
+
                 .and()
                 .build();
     }

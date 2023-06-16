@@ -57,7 +57,29 @@ public class PostService {
         return postMapper.findPostListByNewest();
     }
 
+    public List<likePostDto> PostListByLike() {
+
+        return postMapper.findPostListByLike();
+    }
+
+    public List<viewPostDto> PostListByView() {
+
+        return postMapper.findPostListByView();
+    }
+
     public List<Post> listCategoryPost(Object category) {
         return postMapper.selectCategoryPostList(category);
+    }
+
+    public void likePost(Long postId) {
+        postMapper.updateLikePost(postId);
+    }
+
+    public void addViews(Long postId) {
+        postMapper.updateViews(postId);
+    }
+
+    public List<searchPostDto> searchPost(String keyword) {
+        return postMapper.findByKeyword(keyword);
     }
 }

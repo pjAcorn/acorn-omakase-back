@@ -3,6 +3,7 @@ package acorn.omakase.controller;
 import acorn.omakase.dto.userdto.*;
 import acorn.omakase.service.user.EmailService;
 import acorn.omakase.service.user.UserService;
+import acorn.omakase.token.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -84,5 +85,32 @@ public class UserController {
 
         return new ResponseEntity<String>("비밀번호 변경 완료", HttpStatus.OK);
     }
+
+    // 로그아웃
+    @GetMapping("/logout")
+    public ResponseEntity logout(
+            @RequestHeader(value = "Authorization") String acTokenRequest,
+            @RequestHeader(value = "RefreshToken") String rfTokenRequest
+    ) {
+        String accessToken = acTokenRequest.substring(7);
+        String refreshToken = rfTokenRequest.substring(7);
+        userService.logout(accessToken, refreshToken);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<TokenResponse> reissue(
+            @RequestHeader(value = "Authorization") String acTokenRequest,
+            @RequestHeader(value = "RefreshToken") String rfTokenRequest) {
+
+        String accessToken = acTokenRequest.substring(7);
+        String refreshToken = rfTokenRequest.substring(7);
+
+        TokenResponse tokenResponse = userService.reissue(accessToken, refreshToken);
+
+        return new ResponseEntity(tokenResponse, HttpStatus.OK);
+    }
+
 }
 

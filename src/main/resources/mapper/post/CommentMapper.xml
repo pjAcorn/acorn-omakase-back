@@ -5,12 +5,13 @@
     <!-- 새 댓글 쓰기 -->
     <insert id="insertComment" parameterType="acorn.omakase.domain.Comment" useGeneratedKeys="true"
             keyProperty="commentId" keyColumn="comment_id">
-        insert into omakase.comment(content, user_id, post_id) values(#{content}, #{userId}, #{postId})
+        insert into omakase.comment(comment_content, user_id, post_id, like_count)
+        values(#{commentContent}, #{userId}, #{postId}, 0)
     </insert>
 
     <!-- 댓글 수정 -->
     <update id="updateComment" parameterType="acorn.omakase.domain.Comment">
-        update omakase.comment set content = #{content}, updated_at = now() where comment_id = #{commentId}
+        update omakase.comment set comment_content = #{commentContent}, updated_at = now() where comment_id = #{commentId}
     </update>
 
     <!-- 댓글 삭제 -->
@@ -25,7 +26,7 @@
 
     <!-- 댓글 리스트 -->
     <select id="selectCommentList" resultType="map" parameterType="long">
-        select c.comment_id, c.content, u.nickname, DATE_FORMAT(c.created_at, '%Y-%m-%d %H:%i:%s') as created_at, DATE_FORMAT(c.updated_at, '%Y-%m-%d %H:%i:%s') as updated_at, c.like_count
+        select c.comment_id, c.comment_content, u.nickname, DATE_FORMAT(c.created_at, '%Y-%m-%d %H:%i:%s') as created_at, DATE_FORMAT(c.updated_at, '%Y-%m-%d %H:%i:%s') as updated_at, c.like_count
         from omakase.comment c
         join user u
         on c.user_id = u.user_id

@@ -3,9 +3,8 @@ package acorn.omakase.dto.commentDto;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter @Getter
-public class newCommentRequest {
-    private String content;
-    private Long userId;
+@Getter
+public class NewCommentRequest {
+    private String commentContent;
     private Long postId;
 }

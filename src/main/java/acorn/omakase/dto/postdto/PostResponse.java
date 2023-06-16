@@ -19,5 +19,6 @@ public class PostResponse {
     private String createdAt;
     private String category;
     private String nickname;
-
+    private long viewCount;
+    private long likeCount;
 }
