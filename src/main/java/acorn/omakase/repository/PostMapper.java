@@ -30,5 +30,5 @@ public interface PostMapper {
 
     void updateViews(Long postId);
 
-    List<searchPostDto> findByKeyword(String keyword);
+    List<searchPostDto> findByKeyword(Object keyword);
 }

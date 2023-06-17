@@ -21,7 +21,7 @@
     <!-- 게시글 단건 조회 -->
     <select id="findById" parameterType="Long" resultType="acorn.omakase.dto.postdto.PostResponse">
         select
-        p.post_id, p.title, p.content, DATE_FORMAT(p.created_at, '%Y-%m-%d %H:%i:%s') as created_at, p.category, u.nickname, p.count, p.like_count
+        p.post_id, p.title, p.content, DATE_FORMAT(p.created_at, '%Y-%m-%d %H:%i:%s') as created_at, p.category, u.nickname, p.view_count, p.like_count
         from omakase.POST p
         join omakase.user u on p.user_id = u.user_id
         where p.post_id = #{postId}
@@ -29,7 +29,7 @@
     </select>
 
     <select id="selectCategoryPostList" resultType="map" parameterType="String">
-        select * from omakase.post where category = #{category} order by createdAt desc
+        select * from omakase.post where category = #{category} order by created_at desc
     </select>
 
     <!-- 게시글 최신순 리스트 조회 -->
@@ -79,12 +79,12 @@
         from POST p
         join user u
         ON p.user_id = u.user_id
-        order by p.count desc
+        order by p.view_count desc
     </select>
 
     <!-- 게시글 조회수 업뎃 -->
     <update id="updateViews" parameterType="long">
-        update omakase.post set count = count + 1 where post_id = #{postId}
+        update omakase.post set view_count = view_count + 1 where post_id = #{postId}
     </update>
 
     <!-- 게시글 제목 검색 -->
