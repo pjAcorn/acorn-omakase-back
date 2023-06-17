@@ -1,5 +1,7 @@
 package acorn.omakase.controller;
 
+import acorn.omakase.common.code.SuccessCode;
+import acorn.omakase.common.response.ApiResponse;
 import acorn.omakase.dto.userdto.*;
 import acorn.omakase.service.user.EmailService;
 import acorn.omakase.service.user.UserService;
@@ -23,7 +25,7 @@ public class UserController {
     public ResponseEntity signup(@RequestBody SignupRequest signupRequest) {
         userService.signup(signupRequest);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(new ApiResponse(SuccessCode.SIGNUP_SUCCESS), HttpStatus.OK);
     }
 
 
@@ -55,7 +57,7 @@ public class UserController {
     @PostMapping("/delete")
     public ResponseEntity delete(@RequestBody DeleteIdRequest deleteIdRequest){
         userService.delete(deleteIdRequest);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(new ApiResponse(SuccessCode.DELETE_USER),HttpStatus.OK);
     }
 
     // 아이디 중복 확인
@@ -63,7 +65,7 @@ public class UserController {
     public ResponseEntity IdChk(@RequestBody IdChkRequest idChkRequest){
         userService.idChk(idChkRequest);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(new ApiResponse(SuccessCode.CAN_USE_ID),HttpStatus.OK);
     }
 
     private final EmailService emailService;
@@ -83,7 +85,7 @@ public class UserController {
     public ResponseEntity resetPw(@RequestBody ResetPwRequest resetPwRequest){
         userService.resetPw(resetPwRequest);
 
-        return new ResponseEntity<String>("비밀번호 변경 완료", HttpStatus.OK);
+        return new ResponseEntity(new ApiResponse(SuccessCode.UPDATE_PASSWORD), HttpStatus.OK);
     }
 
     // 로그아웃
@@ -96,7 +98,7 @@ public class UserController {
         String refreshToken = rfTokenRequest.substring(7);
         userService.logout(accessToken, refreshToken);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(new ApiResponse(SuccessCode.LOGOUT), HttpStatus.OK);
     }
 
     @PostMapping("/reissue")
@@ -112,5 +114,19 @@ public class UserController {
         return new ResponseEntity(tokenResponse, HttpStatus.OK);
     }
 
+    // 이메일 중복
+    @PostMapping("/emailChk")
+    public ResponseEntity emailChk(EmailChkRequest emailChkRequest){
+        userService.emailChk(emailChkRequest);
+        return new ResponseEntity(new ApiResponse(SuccessCode.CAN_USE_EMAIL), HttpStatus.OK);
+    }
+
+    // 마이페이지
+    @GetMapping("/{userId}")
+    public ResponseEntity myPage(@PathVariable("userId") Long userId){
+        MyPageResponse myPage = userService.myPage(userId);
+        return new ResponseEntity(myPage, HttpStatus.OK);
+    }
 }
+
 

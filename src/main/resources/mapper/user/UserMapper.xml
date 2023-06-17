@@ -65,4 +65,12 @@
     <select id="findByLoginId" parameterType="String" resultType="acorn.omakase.domain.user.User">
         SELECT * FROM USER WHERE login_id = #{loginId}
     </select>
+
+    <select id="emailChk" parameterType="acorn.omakase.dto.userdto.EmailChkRequest" resultType="int">
+        SELECT COUNT(*) FROM USER WHERE email = #{email}
+    </select>
+
+    <select id="myPage" parameterType="Long" resultType="acorn.omakase.dto.userdto.MyPageResponse">
+        SELECT login_id, name, email, region, nickname FROM USER WHERE user_id = #{userId}
+    </select>
 </mapper>
