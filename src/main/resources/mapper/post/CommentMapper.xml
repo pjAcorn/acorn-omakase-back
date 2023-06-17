@@ -5,12 +5,15 @@
     <!-- 새 댓글 쓰기 -->
     <insert id="insertComment" parameterType="acorn.omakase.domain.Comment" useGeneratedKeys="true"
             keyProperty="commentId" keyColumn="comment_id">
-        insert into omakase.comment(comment_content, user_id, post_id) values(#{content}, #{userId}, #{postId})
+        insert into omakase.comment(comment_content, user_id, post_id, like_count)
+        values(#{commentContent}, #{userId}, #{postId}, 0)
+
     </insert>
 
     <!-- 댓글 수정 -->
     <update id="updateComment" parameterType="acorn.omakase.domain.Comment">
-        update omakase.comment set comment_content = #{content}, updated_at = now() where comment_id = #{commentId}
+        update omakase.comment set comment_content = #{commentContent}, updated_at = now() where comment_id = #{commentId}
+
     </update>
 
     <!-- 댓글 삭제 -->

@@ -5,7 +5,7 @@
     <!-- 게시글 등록 -->
     <insert id="insertPost" parameterType="acorn.omakase.domain.Post" useGeneratedKeys="true"
             keyProperty="postId" keyColumn="post_id">
-        insert into omakase.post(title, content, user_id, category) values(#{title}, #{content}, #{userId}, #{category})
+        insert into omakase.post(title, content, user_id, category, like_count, count) values(#{title}, #{content}, #{userId}, #{category}, 0, 0)
     </insert>
 
     <!-- 게시글 수정 -->
