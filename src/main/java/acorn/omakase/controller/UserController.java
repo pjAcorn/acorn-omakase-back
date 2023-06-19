@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 public class UserController {
 
     private final UserService userService;
+    private final EmailService emailService;
 
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestBody SignupRequest signupRequest) {
@@ -61,14 +62,19 @@ public class UserController {
     }
 
     // 아이디 중복 확인
-    @PostMapping("/idChk")
-    public ResponseEntity IdChk(@RequestBody IdChkRequest idChkRequest){
+    @PostMapping("/signup/id")
+    public ResponseEntity duplicationId(@RequestBody IdChkRequest idChkRequest){
         userService.idChk(idChkRequest);
 
         return new ResponseEntity(new ApiResponse(SuccessCode.CAN_USE_ID),HttpStatus.OK);
     }
 
-    private final EmailService emailService;
+    // 이메일 중복 확인
+    @PostMapping("/signup/email")
+    public ResponseEntity emailChk(EmailChkRequest emailChkRequest){
+        userService.emailChk(emailChkRequest);
+        return new ResponseEntity(new ApiResponse(SuccessCode.CAN_USE_EMAIL), HttpStatus.OK);
+    }
 
     // 이메일 인증
     @PostMapping("/login/mailConfirm")
@@ -114,12 +120,7 @@ public class UserController {
         return new ResponseEntity(tokenResponse, HttpStatus.OK);
     }
 
-    // 이메일 중복
-    @PostMapping("/emailChk")
-    public ResponseEntity emailChk(EmailChkRequest emailChkRequest){
-        userService.emailChk(emailChkRequest);
-        return new ResponseEntity(new ApiResponse(SuccessCode.CAN_USE_EMAIL), HttpStatus.OK);
-    }
+
 
     // 마이페이지
     @GetMapping("/{userId}")
