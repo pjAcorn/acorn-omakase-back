@@ -7,6 +7,7 @@ import acorn.omakase.service.user.EmailService;
 import acorn.omakase.service.user.UserService;
 import acorn.omakase.token.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +16,14 @@ import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
+    private final EmailService emailService;
 
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestBody SignupRequest signupRequest) {
@@ -32,9 +35,9 @@ public class UserController {
 
     @PostMapping("/find/id")
     public ResponseEntity findId(@RequestBody FindIdRequest findIdRequest){
-        String id = userService.findId(findIdRequest);
-
-        return new ResponseEntity(id, HttpStatus.OK);
+        String loginId = userService.findId(findIdRequest);
+        log.info("loginId={}", loginId);
+        return new ResponseEntity(loginId, HttpStatus.OK);
     }
 
     // 비밀번호 찾기
@@ -62,17 +65,22 @@ public class UserController {
     }
 
     // 아이디 중복 확인
-    @PostMapping("/idChk")
-    public ResponseEntity IdChk(@RequestBody IdChkRequest idChkRequest){
+    @PostMapping("/signup/id")
+    public ResponseEntity duplicationId(@RequestBody IdChkRequest idChkRequest){
         userService.idChk(idChkRequest);
 
         return new ResponseEntity(new ApiResponse(SuccessCode.CAN_USE_ID),HttpStatus.OK);
     }
 
-    private final EmailService emailService;
+    // 이메일 중복 확인
+    @PostMapping("/signup/email")
+    public ResponseEntity emailChk(EmailChkRequest emailChkRequest){
+        userService.emailChk(emailChkRequest);
+        return new ResponseEntity(new ApiResponse(SuccessCode.CAN_USE_EMAIL), HttpStatus.OK);
+    }
 
     // 이메일 인증
-    @PostMapping("/login/mailConfirm")
+    @PostMapping("/email")
     public ResponseEntity mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
 
         emailService.sendEmail(emailDto.getEmail());
@@ -115,12 +123,7 @@ public class UserController {
         return new ResponseEntity(tokenResponse, HttpStatus.OK);
     }
 
-    // 이메일 중복
-    @PostMapping("/emailChk")
-    public ResponseEntity emailChk(EmailChkRequest emailChkRequest){
-        userService.emailChk(emailChkRequest);
-        return new ResponseEntity(new ApiResponse(SuccessCode.CAN_USE_EMAIL), HttpStatus.OK);
-    }
+
 
     // 마이페이지
     @GetMapping("/{userId}")

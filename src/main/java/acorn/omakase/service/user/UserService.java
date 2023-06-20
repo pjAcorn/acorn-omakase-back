@@ -52,7 +52,7 @@ public class UserService {
             throw new CustomIllegalStateException(ErrorCode.INVALID_NUMBER);
         }
 
-        return Optional.ofNullable(userMapper.findId(findIdRequest))
+        return Optional.ofNullable(userMapper.findId(email))
                 .orElseThrow(() -> new CustomIllegalStateException(ErrorCode.NOT_FOUND_USER));
     }
 

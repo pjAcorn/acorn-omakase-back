@@ -14,7 +14,7 @@ public interface UserMapper {
     void signup(User user);
 
 
-    String findId(FindIdRequest findId);
+    String findId(String email);
 
     int findPw(FindPwRequest findPw);
 

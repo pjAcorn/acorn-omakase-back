@@ -1,6 +1,9 @@
 package acorn.omakase.controller;
 
 import acorn.omakase.dto.analyzeDto.newAnalyzeRequest;
+
+import acorn.omakase.service.AnalyzeService;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
