@@ -62,8 +62,9 @@ public class AnalyzeController {
 
         // HTTP BODY에 넣을 JSON 생성
         ObjectNode jsonNodes = JsonNodeFactory.instance.objectNode();
+        jsonNodes.put("addressSido", newAnalyzeRequest.getAddressSido());
+        jsonNodes.put("addressSigungu", newAnalyzeRequest.getAddressSigungu());
         jsonNodes.put("category", newAnalyzeRequest.getCategory());
-        jsonNodes.put("address", newAnalyzeRequest.getAddress());
 
         ResponseEntity<JsonNode> postResult = restTemplate.postForEntity(
                                                 URI_COMPONENTS.toUri(),
