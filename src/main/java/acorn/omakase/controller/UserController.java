@@ -5,7 +5,9 @@ import acorn.omakase.common.response.ApiResponse;
 import acorn.omakase.dto.userdto.*;
 import acorn.omakase.service.user.EmailService;
 import acorn.omakase.service.user.UserService;
+
 import acorn.omakase.token.dto.TokenResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 
 @Slf4j
@@ -24,6 +27,7 @@ public class UserController {
     private final UserService userService;
     private final EmailService emailService;
 
+ 
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestBody SignupRequest signupRequest) {
         userService.signup(signupRequest);
@@ -126,10 +130,20 @@ public class UserController {
     // 마이페이지
     @GetMapping("/{userId}")
     public ResponseEntity myPage(@PathVariable("userId") Long userId){
+
         MyPageResponse myPage = userService.myPage(userId);
-        System.out.println("myPage = " + myPage);
         return new ResponseEntity(myPage, HttpStatus.OK);
     }
+
+    // 회원 정보 수정
+    @PutMapping("/modify/{userId}")
+    public ResponseEntity update(@PathVariable("userId") Long userId, @RequestBody @Valid UpdateProfileRequest updateRequest) {
+
+        userService.update(userId, updateRequest);
+
+        return new ResponseEntity(new ApiResponse(SuccessCode.UPDATE_USER), HttpStatus.OK);
+    }
+
 }
 
 
