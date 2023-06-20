@@ -5,7 +5,9 @@ import acorn.omakase.common.response.ApiResponse;
 import acorn.omakase.dto.userdto.*;
 import acorn.omakase.service.user.EmailService;
 import acorn.omakase.service.user.UserService;
+
 import acorn.omakase.token.dto.TokenResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,7 @@ public class UserController {
     private final UserService userService;
     private final EmailService emailService;
 
+ 
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestBody SignupRequest signupRequest) {
         userService.signup(signupRequest);

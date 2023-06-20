@@ -58,6 +58,7 @@ dependencies {
 
 	// POST 전송을 위한 factory
 	implementation 'org.apache.httpcomponents:httpclient'
+
 }
 
 tasks.named('test') {
