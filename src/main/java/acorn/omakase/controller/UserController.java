@@ -35,7 +35,6 @@ public class UserController {
     @PostMapping("/find/id")
     public ResponseEntity findId(@RequestBody FindIdRequest findIdRequest){
         String loginId = userService.findId(findIdRequest);
-        log.info("loginId={}", loginId);
         return new ResponseEntity(loginId, HttpStatus.OK);
     }
 
@@ -128,6 +127,7 @@ public class UserController {
     @GetMapping("/{userId}")
     public ResponseEntity myPage(@PathVariable("userId") Long userId){
         MyPageResponse myPage = userService.myPage(userId);
+        System.out.println("myPage = " + myPage);
         return new ResponseEntity(myPage, HttpStatus.OK);
     }
 }
