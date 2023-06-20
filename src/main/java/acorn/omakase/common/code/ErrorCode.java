@@ -32,6 +32,7 @@ public enum ErrorCode {
     NO_MATCHES_INFO(400, "U008", "토큰의 유저 정보가 일치하지 않습니다."),
     NO_MATCHES_PASSWORD(400, "U009", "비밀번호가 회원 정보와 일치하지 않습니다."),
     NO_MATCHES_PASSWORD2(400, "U010", "입력한 두 비밀번호가 일치하지 않습니다."),
+    NO_MATCHES_LOGIN_ID(400, "U011", "인증되지 않은 사용자입니다."),
     // ChattingRoom
     NOT_FOUND_ROOM(404, "C001", "채팅방을 찾을 수 없습니다.");
 

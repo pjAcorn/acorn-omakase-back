@@ -1,6 +1,6 @@
 package acorn.omakase.token;
 
-import acorn.omakase.service.user.RedisUtil;
+import acorn.omakase.service.user.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
