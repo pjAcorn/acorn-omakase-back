@@ -15,6 +15,7 @@ public enum SuccessCode {
     SEND_EMAIL("SendEmail", "이메일 전송이 완료되었습니다."),
     CERTIFY_CODE("CertifyCode", "인증이 완료되었습니다."),
     LOGOUT("Logout", "로그아웃 되었습니다."),
+    UPDATE_USER("UpdateUser", "회원 정보가 수정되었습니다."),
 
     //post
     CREATE_SUCCESS("Created", "게시물이 등록되었습니다.");

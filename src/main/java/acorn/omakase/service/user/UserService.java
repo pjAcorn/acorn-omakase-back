@@ -5,6 +5,8 @@ import acorn.omakase.common.exception.CustomIllegalStateException;
 import acorn.omakase.domain.user.User;
 import acorn.omakase.dto.userdto.*;
 import acorn.omakase.repository.UserMapper;
+import acorn.omakase.service.user.util.RedisUtil;
+import acorn.omakase.service.user.util.SecurityUtil;
 import acorn.omakase.token.TokenProvider;
 import acorn.omakase.token.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +52,7 @@ public class UserService {
             throw new CustomIllegalStateException(ErrorCode.INVALID_NUMBER);
         }
 
-        return Optional.ofNullable(userMapper.findId(findIdRequest))
+        return Optional.ofNullable(userMapper.findId(email))
                 .orElseThrow(() -> new CustomIllegalStateException(ErrorCode.NOT_FOUND_USER));
     }
 
@@ -201,7 +203,22 @@ public class UserService {
     }
 
     public MyPageResponse myPage(Long userId) {
-        MyPageResponse myPage = userMapper.myPage(userId);
+        Long LoginUserId = SecurityUtil.getCurrentUserId();
+        if(!LoginUserId.equals(userId)){
+            throw new CustomIllegalStateException(ErrorCode.NO_MATCHES_LOGIN_ID);
+        }
+        MyPageResponse myPage = userMapper.myPage(LoginUserId);
         return myPage;
+    }
+
+    public void update(Long userId, UpdateProfileRequest updateProfileRequest) {
+        Long LoginUserId = SecurityUtil.getCurrentUserId();
+
+        if(!LoginUserId.equals(userId)){
+            throw new CustomIllegalStateException(ErrorCode.NO_MATCHES_LOGIN_ID);
+        }
+        updateProfileRequest.setUserId(LoginUserId);
+
+        userMapper.update(updateProfileRequest);
     }
 }

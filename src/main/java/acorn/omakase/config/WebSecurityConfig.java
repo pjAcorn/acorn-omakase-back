@@ -1,6 +1,6 @@
 package acorn.omakase.config;
 
-import acorn.omakase.service.user.RedisUtil;
+import acorn.omakase.service.user.util.RedisUtil;
 import acorn.omakase.token.TokenProvider;
 
 import acorn.omakase.token.accessRestriction.JwtAccessDeniedHandler;

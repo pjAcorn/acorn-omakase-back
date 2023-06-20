@@ -14,7 +14,7 @@ public interface UserMapper {
     void signup(User user);
 
 
-    String findId(FindIdRequest findId);
+    String findId(String email);
 
     int findPw(FindPwRequest findPw);
 
@@ -42,4 +42,7 @@ public interface UserMapper {
 
     // 마이페이지
     MyPageResponse myPage(Long userId);
+
+    // 회원정보 수정
+    int update(UpdateProfileRequest updateRequest);
 }

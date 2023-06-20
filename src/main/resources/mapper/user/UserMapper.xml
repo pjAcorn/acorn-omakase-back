@@ -18,8 +18,9 @@
 <!--    </select>-->
 
     <!--회원 아이디 찾기-->
-    <select id="findId" parameterType="acorn.omakase.dto.userdto.FindIdRequest" resultType="String">
-        SELECT login_id FROM USER WHERE name=#{name} and email=#{email}
+    <select id="findId" parameterType="String" resultType="String">
+        SELECT login_id FROM USER WHERE email=#{email}
+<!--        name=#{name} and-->
     </select>
 
     <!--회원 비밀번호 찾기-->
@@ -50,6 +51,7 @@
         WHERE login_id = #{loginId}
     </select>
 
+    <!-- 비밀번호 수정 -->
     <update id="resetPw" parameterType="acorn.omakase.dto.userdto.ResetPwRequest">
         UPDATE USER
         SET password = #{pw}
@@ -73,4 +75,12 @@
     <select id="myPage" parameterType="Long" resultType="acorn.omakase.dto.userdto.MyPageResponse">
         SELECT login_id, name, email, region, nickname FROM USER WHERE user_id = #{userId}
     </select>
+
+    <!-- 회원 정보 수정 -->
+    <update id="update" parameterType="acorn.omakase.dto.userdto.UpdateProfileRequest">
+        UPDATE USER
+        SET name = #{name}, email = #{email}, region = #{region}, nickname = #{nickname}
+        where user_id = #{userId}
+    </update>
+
 </mapper>
