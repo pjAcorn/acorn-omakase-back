@@ -7,6 +7,7 @@ import acorn.omakase.service.user.EmailService;
 import acorn.omakase.service.user.UserService;
 import acorn.omakase.token.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -32,9 +34,9 @@ public class UserController {
 
     @PostMapping("/find/id")
     public ResponseEntity findId(@RequestBody FindIdRequest findIdRequest){
-        String id = userService.findId(findIdRequest);
-
-        return new ResponseEntity(id, HttpStatus.OK);
+        String loginId = userService.findId(findIdRequest);
+        log.info("loginId={}", loginId);
+        return new ResponseEntity(loginId, HttpStatus.OK);
     }
 
     // 비밀번호 찾기
@@ -77,7 +79,7 @@ public class UserController {
     }
 
     // 이메일 인증
-    @PostMapping("/login/mailConfirm")
+    @PostMapping("/email")
     public ResponseEntity mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
 
         emailService.sendEmail(emailDto.getEmail());
