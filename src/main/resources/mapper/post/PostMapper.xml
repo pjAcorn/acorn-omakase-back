@@ -5,17 +5,17 @@
     <!-- 게시글 등록 -->
     <insert id="insertPost" parameterType="acorn.omakase.domain.Post" useGeneratedKeys="true"
             keyProperty="postId" keyColumn="post_id">
-        insert into omakase.post(title, content, user_id, category, like_count, view_count) values(#{title}, #{content}, #{userId}, #{category}, 0, 0)
+        insert into omakase.POST(title, content, user_id, category, like_count, view_count) values(#{title}, #{content}, #{userId}, #{category}, 0, 0)
     </insert>
 
     <!-- 게시글 수정 -->
     <update id="updatePost" parameterType="acorn.omakase.domain.Post">
-        update omakase.post set title = #{title}, content = #{content}, category = #{category} where post_id = #{postId}
+        update omakase.POST set title = #{title}, content = #{content}, category = #{category} where post_id = #{postId}
     </update>
 
     <!-- 게시글 삭제 -->
     <delete id="deletePost" parameterType="int">
-        delete from omakase.post where post_id = #{postId}
+        delete from omakase.POST where post_id = #{postId}
     </delete>
 
     <!-- 게시글 단건 조회 -->
@@ -23,13 +23,13 @@
         select
         p.post_id, p.title, p.content, DATE_FORMAT(p.created_at, '%Y-%m-%d %H:%i:%s') as created_at, p.category, u.nickname, p.view_count, p.like_count
         from omakase.POST p
-        join omakase.user u on p.user_id = u.user_id
+        join omakase.USER u on p.user_id = u.user_id
         where p.post_id = #{postId}
         order by p.created_at desc;
     </select>
 
     <select id="selectCategoryPostList" resultType="map" parameterType="String">
-        select * from omakase.post where category = #{category} order by created_at desc
+        select * from omakase.POST where category = #{category} order by created_at desc
     </select>
 
     <!-- 게시글 최신순 리스트 조회 -->
@@ -40,7 +40,7 @@
         DATE_FORMAT(p.created_at, '%Y-%m-%d %H:%i:%s') as created_at,
         u.nickname
         from POST p
-        join user u
+        join USER u
         ON p.user_id = u.user_id
         order by p.created_at desc
 
@@ -54,7 +54,7 @@
 
     <!-- 게시물 좋아요 -->
     <update id="updateLikePost" parameterType="long">
-        update omakase.post set like_count = like_count + 1 where post_id = #{postId}
+        update omakase.POST set like_count = like_count + 1 where post_id = #{postId}
     </update>
 
     <!-- 게시글 추천순 리스트 조회 -->
@@ -64,7 +64,7 @@
         DATE_FORMAT(p.created_at, '%Y-%m-%d %H:%i:%s') as created_at,
         u.nickname
         from POST p
-        join user u
+        join USER u
         ON p.user_id = u.user_id
         order by p.like_count desc
 
@@ -84,7 +84,7 @@
 
     <!-- 게시글 조회수 업뎃 -->
     <update id="updateViews" parameterType="long">
-        update omakase.post set view_count = view_count + 1 where post_id = #{postId}
+        update omakase.POST set view_count = view_count + 1 where post_id = #{postId}
     </update>
 
     <!-- 게시글 제목 검색 -->
@@ -94,7 +94,7 @@
         DATE_FORMAT(p.created_at, '%Y-%m-%d %H:%i:%s') as created_at,
         u.nickname
         from POST p
-        join user u
+        join USER u
         ON p.user_id = u.user_id
         where title like concat('%', #{keyword}, '%')
         order by p.created_at desc
