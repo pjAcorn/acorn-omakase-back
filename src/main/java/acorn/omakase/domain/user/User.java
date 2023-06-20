@@ -1,10 +1,13 @@
-package acorn.omakase.domain;
+package acorn.omakase.domain.user;
 
-import acorn.omakase.dto.userdto.DeleteIdRequest;
-import acorn.omakase.dto.userdto.FindIdRequest;
-import acorn.omakase.dto.userdto.IdValidateRequest;
 import acorn.omakase.dto.userdto.SignupRequest;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -17,6 +20,7 @@ public class User {
     private String email;
     private String region;
     private String nickname;
+//    private Role role;
 
     @Builder
     public User(Long userId, String loginId, String name, String password, String email, String region, String nickname) {
@@ -27,7 +31,11 @@ public class User {
         this.email = email;
         this.region = region;
         this.nickname = nickname;
+        this.role = Role.ROLE_USER;
     }
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public static User of(SignupRequest signupRequest) {
         return User.builder()
@@ -39,14 +47,7 @@ public class User {
                 .region(signupRequest.getRegion()).build();
     }
 
-    public static User of(FindIdRequest findIdRequest) {
-        return User.builder()
-                .email(findIdRequest.getEmail())
-                .name(findIdRequest.getName()).build();
-    }
-
-    public static User of(IdValidateRequest idValidateRequest){
-        return User.builder()
-                .loginId(idValidateRequest.getLoginId()).build();
+    public void encodingPassword(String password) {
+        this.password = password;
     }
 }

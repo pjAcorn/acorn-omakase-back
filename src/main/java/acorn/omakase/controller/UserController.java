@@ -1,50 +1,46 @@
 package acorn.omakase.controller;
 
-import acorn.omakase.domain.User;
+import acorn.omakase.common.code.SuccessCode;
+import acorn.omakase.common.response.ApiResponse;
 import acorn.omakase.dto.userdto.*;
 import acorn.omakase.service.user.EmailService;
 import acorn.omakase.service.user.UserService;
-import io.swagger.annotations.ApiOperation;
+
+import acorn.omakase.token.dto.TokenResponse;
+
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-
+import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
-@Transactional
 public class UserController {
 
     private final UserService userService;
+    private final EmailService emailService;
 
-    @GetMapping("/userlist")
-    public ResponseEntity getUserList() {
-        List<User> userList = userService.getUserList();
-        return new ResponseEntity(userList, HttpStatus.OK);
-    }
-
-    @ApiOperation(value = "회원가입")
+ 
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestBody SignupRequest signupRequest) {
         userService.signup(signupRequest);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(new ApiResponse(SuccessCode.SIGNUP_SUCCESS), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "아이디 찾기")
+
     @PostMapping("/find/id")
     public ResponseEntity findId(@RequestBody FindIdRequest findIdRequest){
-        String id = userService.findId(findIdRequest);
-
-        return new ResponseEntity(id, HttpStatus.OK);
+        String loginId = userService.findId(findIdRequest);
+        log.info("loginId={}", loginId);
+        return new ResponseEntity(loginId, HttpStatus.OK);
     }
 
     // 비밀번호 찾기
@@ -58,35 +54,42 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequest loginRequest) throws Exception {
-        User userId = userService.login(loginRequest);
 
-        return new ResponseEntity(userId, HttpStatus.OK);
+        LoginResponse loginResponse = userService.login(loginRequest);
+
+        return new ResponseEntity(loginResponse, HttpStatus.OK);
     }
 
     // 회원탈퇴
     @PostMapping("/delete")
     public ResponseEntity delete(@RequestBody DeleteIdRequest deleteIdRequest){
         userService.delete(deleteIdRequest);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(new ApiResponse(SuccessCode.DELETE_USER),HttpStatus.OK);
     }
 
     // 아이디 중복 확인
-    @PostMapping("/idValidation")
-    public ResponseEntity IdValidation(@RequestBody IdValidateRequest idValidateRequest){
-        userService.idValidate(idValidateRequest);
+    @PostMapping("/signup/id")
+    public ResponseEntity duplicationId(@RequestBody IdChkRequest idChkRequest){
+        userService.idChk(idChkRequest);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(new ApiResponse(SuccessCode.CAN_USE_ID),HttpStatus.OK);
     }
 
-    private final EmailService emailService;
+    // 이메일 중복 확인
+    @PostMapping("/signup/email")
+    public ResponseEntity emailChk(EmailChkRequest emailChkRequest){
+        userService.emailChk(emailChkRequest);
+        return new ResponseEntity(new ApiResponse(SuccessCode.CAN_USE_EMAIL), HttpStatus.OK);
+    }
 
     // 이메일 인증
-    @PostMapping("/login/mailConfirm")
-    public String mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
+    @PostMapping("/email")
+    public ResponseEntity mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
 
-        String authCode = emailService.sendEmail(emailDto.getEmail());
+        emailService.sendEmail(emailDto.getEmail());
+
         // 인증코드를 그대로 반환하는거?
-        return authCode;
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     // 비밀번호 재설정
@@ -94,7 +97,55 @@ public class UserController {
     public ResponseEntity resetPw(@RequestBody ResetPwRequest resetPwRequest){
         userService.resetPw(resetPwRequest);
 
-        return new ResponseEntity<String>("비밀번호 변경 완료", HttpStatus.OK);
+        return new ResponseEntity(new ApiResponse(SuccessCode.UPDATE_PASSWORD), HttpStatus.OK);
     }
+
+    // 로그아웃
+    @GetMapping("/logout")
+    public ResponseEntity logout(
+            @RequestHeader(value = "Authorization") String acTokenRequest,
+            @RequestHeader(value = "RefreshToken") String rfTokenRequest
+    ) {
+        String accessToken = acTokenRequest.substring(7);
+        String refreshToken = rfTokenRequest.substring(7);
+        userService.logout(accessToken, refreshToken);
+
+        return new ResponseEntity(new ApiResponse(SuccessCode.LOGOUT), HttpStatus.OK);
+    }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<TokenResponse> reissue(
+            @RequestHeader(value = "Authorization") String acTokenRequest,
+            @RequestHeader(value = "RefreshToken") String rfTokenRequest) {
+
+        String accessToken = acTokenRequest.substring(7);
+        String refreshToken = rfTokenRequest.substring(7);
+
+        TokenResponse tokenResponse = userService.reissue(accessToken, refreshToken);
+
+        return new ResponseEntity(tokenResponse, HttpStatus.OK);
+    }
+
+
+
+    // 마이페이지
+    @GetMapping("/{userId}")
+    public ResponseEntity myPage(@PathVariable("userId") Long userId){
+
+        MyPageResponse myPage = userService.myPage(userId);
+
+        return new ResponseEntity(myPage, HttpStatus.OK);
+    }
+
+    // 회원 정보 수정
+    @PutMapping("/modify/{userId}")
+    public ResponseEntity update(@PathVariable("userId") Long userId, @RequestBody @Valid UpdateProfileRequest updateRequest) {
+
+        userService.update(userId, updateRequest);
+
+        return new ResponseEntity(new ApiResponse(SuccessCode.UPDATE_USER), HttpStatus.OK);
+    }
+
 }
+
 

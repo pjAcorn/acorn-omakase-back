@@ -1,8 +1,10 @@
 package acorn.omakase.service.user;
 
+import acorn.omakase.service.user.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
@@ -13,6 +15,7 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class EmailService {
     private final JavaMailSender emailSender;
     private final SpringTemplateEngine templateEngine;
@@ -49,7 +52,7 @@ public class EmailService {
         createCode(); //인증 코드 생성
         String setFrom = "pjacorn0513@naver.com"; //email-config에 설정한 자신의 이메일 주소(보내는 사람)
         String toEmail = email; //받는 사람
-        String title = "CODEBOX 회원가입 인증 번호"; //제목
+        String title = "Omakase 회원가입 인증 번호"; //제목
 
         MimeMessage message = emailSender.createMimeMessage();
         message.addRecipients(MimeMessage.RecipientType.TO, email); //보낼 이메일 설정
@@ -61,7 +64,7 @@ public class EmailService {
     }
 
     //실제 메일 전송
-    public String sendEmail(String toEmail) throws MessagingException, UnsupportedEncodingException {
+    public void sendEmail(String toEmail) throws MessagingException, UnsupportedEncodingException {
 
         //메일전송에 필요한 정보 설정
         MimeMessage emailForm = createEmailForm(toEmail);
@@ -69,7 +72,7 @@ public class EmailService {
         emailSender.send(emailForm);
 
         redisUtil.setDataExpire(authNum, toEmail , 60*5L);
-        return authNum; //인증 코드 반환
+
     }
 
     //타임리프를 이용한 context 설정

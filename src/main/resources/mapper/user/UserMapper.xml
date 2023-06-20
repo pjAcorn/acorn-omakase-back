@@ -2,20 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="acorn.omakase.repository.UserMapper">
 
-    <select id="getUserList" resultType="acorn.omakase.domain.User">
-        SELECT * FROM user
-        ORDER by name asc
-    </select>
 
-    <insert id="signup" parameterType="acorn.omakase.domain.User" useGeneratedKeys="true"
+    <!-- 회원 가입 -->
+    <insert id="signup" parameterType="acorn.omakase.domain.user.User" useGeneratedKeys="true"
             keyProperty="userId" keyColumn="user_id">
-        INSERT INTO USER (login_id, name, password, email, region, nickname)
-        VALUES (#{loginId}, #{name}, #{password}, #{email}, #{region}, #{nickname})
+        INSERT INTO USER (login_id, name, password, email, region, nickname, role)
+        VALUES (#{loginId}, #{name}, #{password}, #{email}, #{region}, #{nickname}, #{role})
     </insert>
 
+<!--    &lt;!&ndash; 로그인 &ndash;&gt;-->
+<!--    <select id="login" parameterType="acorn.omakase.domain.user.User" resultType="int">-->
+<!--        SELECT COUNT(*)-->
+<!--        FROM USER-->
+<!--        WHERE login_id = #{loginId} AND password = #{password}-->
+<!--    </select>-->
+
     <!--회원 아이디 찾기-->
-    <select id="findId" parameterType="acorn.omakase.dto.userdto.FindIdRequest" resultType="String">
-        SELECT login_id FROM USER WHERE name=#{name} and email=#{email}
+    <select id="findId" parameterType="String" resultType="String">
+        SELECT login_id FROM USER WHERE email=#{email}
+<!--        name=#{name} and-->
     </select>
 
     <!--회원 비밀번호 찾기-->
@@ -23,33 +28,59 @@
         SELECT COUNT(password) FROM USER WHERE login_id=#{loginId}
     </select>
 
-    <select id="login" parameterType="acorn.omakase.domain.User" resultType="acorn.omakase.domain.User">
-        SELECT COUNT(*)
+    <select id="login" parameterType="acorn.omakase.domain.user.User" resultType="int">
+        SELECT count(*)
         FROM USER
         WHERE login_id = #{loginId} AND password = #{password}
     </select>
 
     <!--회원 암호 가져오기-->
-    <select id="getPw" parameterType="acorn.omakase.domain.User" resultType="String">
+    <select id="getPw" parameterType="acorn.omakase.domain.user.User" resultType="String">
         SELECT password FROM USER WHERE user_id = #{userId}
-
     </select>
 
     <!--회원 탈퇴-->
-    <delete id="deleteId" parameterType="acorn.omakase.domain.User" >
+    <delete id="deleteId" parameterType="acorn.omakase.domain.user.User" >
         DELETE FROM USER WHERE user_id = #{userId}
     </delete>
 
     <!--아이디 중복 확인-->
-    <select id="idValidate" parameterType="acorn.omakase.domain.User" resultType="int">
+    <select id="idChk" parameterType="acorn.omakase.dto.userdto.IdChkRequest" resultType="int">
         SELECT COUNT(*)
         FROM USER
         WHERE login_id = #{loginId}
     </select>
 
+    <!-- 비밀번호 수정 -->
     <update id="resetPw" parameterType="acorn.omakase.dto.userdto.ResetPwRequest">
         UPDATE USER
-        SET password = #{pw1}
+        SET password = #{pw}
         where login_id = #{loginId}
     </update>
+
+    <!--회원 정보 가져오기-->
+    <select id="findById" parameterType="acorn.omakase.domain.user.User" resultType="acorn.omakase.domain.user.User">
+        SELECT * FROM USER WHERE user_id = #{userId}
+    </select>
+
+    <!-- 로그인 아이디로 회원정보 가져오기   -->
+    <select id="findByLoginId" parameterType="String" resultType="acorn.omakase.domain.user.User">
+        SELECT * FROM USER WHERE login_id = #{loginId}
+    </select>
+
+    <select id="emailChk" parameterType="acorn.omakase.dto.userdto.EmailChkRequest" resultType="int">
+        SELECT COUNT(*) FROM USER WHERE email = #{email}
+    </select>
+
+    <select id="myPage" parameterType="Long" resultType="acorn.omakase.dto.userdto.MyPageResponse">
+        SELECT login_id, name, email, region, nickname FROM USER WHERE user_id = #{userId}
+    </select>
+
+    <!-- 회원 정보 수정 -->
+    <update id="update" parameterType="acorn.omakase.dto.userdto.UpdateProfileRequest">
+        UPDATE USER
+        SET name = #{name}, email = #{email}, region = #{region}, nickname = #{nickname}
+        where user_id = #{userId}
+    </update>
+
 </mapper>

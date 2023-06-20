@@ -1,16 +1,17 @@
 package acorn.omakase.controller;
 
-import acorn.omakase.domain.Comment;
+import acorn.omakase.common.code.SuccessCode;
+import acorn.omakase.common.response.ApiResponse;
 import acorn.omakase.dto.commentDto.modCommentRequest;
-import acorn.omakase.dto.commentDto.newCommentRequest;
-import acorn.omakase.service.CommentService;
+import acorn.omakase.dto.commentDto.NewCommentRequest;
+import acorn.omakase.service.post.CommentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/comment")
@@ -18,43 +19,37 @@ public class CommentController {
     private final CommentService commentService;
 
 //    새 댓글 쓰기
-    @PostMapping("/new_comment")
-    public ResponseEntity newComment(@RequestBody newCommentRequest comment){
+    @PostMapping("/new")
+    public ResponseEntity addComment(@RequestBody NewCommentRequest newCommentRequest,
+                                     @RequestHeader(value = "Authorization") String acTokenRequest){
+        commentService.addComment(newCommentRequest, acTokenRequest);
 
-        commentService.newComment(comment);
-
-        return new ResponseEntity(HttpStatus.CREATED);
-    }
-
-//    댓글 좋아요
-    @PatchMapping("/like_comment")
-    public ResponseEntity likeComment(@RequestBody Object commentId){
-        commentService.likeComment(commentId);
-
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(new ApiResponse(SuccessCode.CREATE_SUCCESS), HttpStatus.OK);
     }
 
 //    댓글 수정
-    @PatchMapping("/mod_comment")
-    public ResponseEntity modComment(@RequestBody modCommentRequest comment){
-        System.out.println("test");
-        //commentService.modComment(comment);
+    @PatchMapping("/mod")
+    public ResponseEntity modComment(@RequestBody modCommentRequest modCommentRequest){
+        commentService.modComment(modCommentRequest);
 
         return new ResponseEntity(HttpStatus.OK);
     }
 
 //    댓글 삭제
-    @DeleteMapping("/del_comment")
-    public ResponseEntity delComment(@RequestBody Object commentId){
+    @DeleteMapping("/del/{commentId}")
+    public ResponseEntity delComment(@PathVariable Long commentId){
         commentService.delComment(commentId);
 
         return new ResponseEntity(HttpStatus.OK);
     }
 
-//    댓글 보기(post에 매핑해놓음)
-    public ResponseEntity viewComment(@RequestBody Object postId){
-        List<Comment> commentList = commentService.viewComment(postId);
+//    댓글 좋아요
+    @PatchMapping("/like/{commentId}")
+    public ResponseEntity likeComment(@PathVariable Long commentId){
+        commentService.likeComment(commentId);
 
-        return new ResponseEntity(commentList, HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
     }
+
+
 }
