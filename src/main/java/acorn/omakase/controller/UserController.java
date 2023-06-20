@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 
 @Slf4j
@@ -127,9 +128,21 @@ public class UserController {
     // 마이페이지
     @GetMapping("/{userId}")
     public ResponseEntity myPage(@PathVariable("userId") Long userId){
+
         MyPageResponse myPage = userService.myPage(userId);
+
         return new ResponseEntity(myPage, HttpStatus.OK);
     }
+
+    // 회원 정보 수정
+    @PutMapping("/modify/{userId}")
+    public ResponseEntity update(@PathVariable("userId") Long userId, @RequestBody @Valid UpdateProfileRequest updateRequest) {
+
+        userService.update(userId, updateRequest);
+
+        return new ResponseEntity(new ApiResponse(SuccessCode.UPDATE_USER), HttpStatus.OK);
+    }
+
 }
 
 
