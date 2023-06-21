@@ -7,5 +7,7 @@ import lombok.Setter;
 public class newAnalyzeRequest {
     private String addressSido;
     private String addressSigungu;
-    private String category;
+    private String cateLData;
+    private String cateAData;
+    private String cateMData;
 }
