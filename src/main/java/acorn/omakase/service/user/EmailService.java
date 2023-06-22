@@ -1,6 +1,6 @@
 package acorn.omakase.service.user;
 
-import acorn.omakase.service.user.util.RedisUtil;
+import acorn.omakase.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;

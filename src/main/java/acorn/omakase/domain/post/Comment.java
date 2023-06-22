@@ -1,4 +1,4 @@
-package acorn.omakase.domain;
+package acorn.omakase.domain.post;
 
 import lombok.*;
 

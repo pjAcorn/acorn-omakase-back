@@ -2,10 +2,9 @@ package acorn.omakase.controller;
 
 import acorn.omakase.common.code.SuccessCode;
 import acorn.omakase.common.response.ApiResponse;
-import acorn.omakase.domain.Post;
 import acorn.omakase.dto.commentDto.commentListDTO;
 import acorn.omakase.dto.postdto.*;
-import acorn.omakase.service.PostService;
+import acorn.omakase.service.post.PostService;
 import acorn.omakase.service.post.CommentService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

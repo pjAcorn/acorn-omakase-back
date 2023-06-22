@@ -1,10 +1,10 @@
 package acorn.omakase.service.post;
 
-import acorn.omakase.domain.Comment;
+import acorn.omakase.domain.post.Comment;
 import acorn.omakase.dto.commentDto.commentListDTO;
 import acorn.omakase.dto.commentDto.modCommentRequest;
 import acorn.omakase.dto.commentDto.NewCommentRequest;
-import acorn.omakase.repository.CommentMapper;
+import acorn.omakase.repository.CommentRepository;
 import acorn.omakase.token.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class CommentService {
-    private final CommentMapper commentMapper;
+    private final CommentRepository commentRepository;
     private final TokenProvider tokenProvider;
 
     @SneakyThrows
@@ -31,26 +31,26 @@ public class CommentService {
         Comment saveComment = Comment.ofNew(
                 newCommentRequest.getCommentContent(), userId, newCommentRequest.getPostId());
 
-        commentMapper.insertComment(saveComment);
+        commentRepository.insertComment(saveComment);
     }
 
     public void modComment(modCommentRequest modCommentRequest) {
         Comment modComment = Comment.ofMod(
                 modCommentRequest.getCommentId(), modCommentRequest.getContent());
 
-        commentMapper.updateComment(modComment);
+        commentRepository.updateComment(modComment);
     }
 
     public void delComment(Long commentId) {
-        commentMapper.deleteComment(commentId);
+        commentRepository.deleteComment(commentId);
     }
 
     public void likeComment(Long commentId) {
-        commentMapper.updateLikeComment(commentId);
+        commentRepository.updateLikeComment(commentId);
     }
 
     public List<commentListDTO> commentList(Long postId) {
-        return commentMapper.selectCommentList(postId);
+        return commentRepository.selectCommentList(postId);
     }
 
 }

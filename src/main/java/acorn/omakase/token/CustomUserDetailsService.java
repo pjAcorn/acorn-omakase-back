@@ -1,7 +1,7 @@
 package acorn.omakase.token;
 
 import acorn.omakase.domain.user.User;
-import acorn.omakase.repository.UserMapper;
+import acorn.omakase.repository.UserRepository;
 import acorn.omakase.token.dto.PrincipalDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,12 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserMapper userMapper;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
-        return userMapper.findByLoginId(loginId)
+        return userRepository.findByLoginId(loginId)
                 .map(this::createUserDetails)
                 .orElseThrow(() -> new UsernameNotFoundException(loginId + "를 찾을 수 없습니다."));
     }

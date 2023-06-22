@@ -1,9 +1,9 @@
-package acorn.omakase.service;
+package acorn.omakase.service.post;
 
 
-import acorn.omakase.domain.Post;
+import acorn.omakase.domain.post.Post;
 import acorn.omakase.dto.postdto.*;
-import acorn.omakase.repository.PostMapper;
+import acorn.omakase.repository.PostRepository;
 import acorn.omakase.token.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class PostService {
-    private final PostMapper postMapper;
+    private final PostRepository postRepository;
     private final TokenProvider tokenProvider;
 
     @SneakyThrows
@@ -30,21 +30,21 @@ public class PostService {
 
         Post savePost = Post.ofNew(
                 newPostRequest.getTitle(), newPostRequest.getContent(), userId, newPostRequest.getCategory());
-        postMapper.insertPost(savePost);
+        postRepository.insertPost(savePost);
     }
 
     public void modPost(modPostRequest post) {
         Post modPost = Post.ofMod(post.getPostId(), post.getTitle(), post.getContent(), post.getCategory());
 
-        postMapper.updatePost(modPost);
+        postRepository.updatePost(modPost);
     }
 
     public void delPost(Object postId) {
-        postMapper.deletePost(postId);
+        postRepository.deletePost(postId);
     }
 
     public PostResponse viewPost(Long postId) {
-        PostResponse post = postMapper.findById(postId);
+        PostResponse post = postRepository.findById(postId);
         if (post == null) {
             throw new IllegalStateException("게시물이 없습니다.");
         }
@@ -54,32 +54,32 @@ public class PostService {
 
     public List<NewestPostDto> PostListByNewest() {
 
-        return postMapper.findPostListByNewest();
+        return postRepository.findPostListByNewest();
     }
 
     public List<likePostDto> PostListByLike() {
 
-        return postMapper.findPostListByLike();
+        return postRepository.findPostListByLike();
     }
 
     public List<viewPostDto> PostListByView() {
 
-        return postMapper.findPostListByView();
+        return postRepository.findPostListByView();
     }
 
     public List<Post> listCategoryPost(Object category) {
-        return postMapper.selectCategoryPostList(category);
+        return postRepository.selectCategoryPostList(category);
     }
 
     public void likePost(Long postId) {
-        postMapper.updateLikePost(postId);
+        postRepository.updateLikePost(postId);
     }
 
     public void addViews(Long postId) {
-        postMapper.updateViews(postId);
+        postRepository.updateViews(postId);
     }
 
     public List<searchPostDto> searchPost(Object keyword) {
-        return postMapper.findByKeyword(keyword);
+        return postRepository.findByKeyword(keyword);
     }
 }

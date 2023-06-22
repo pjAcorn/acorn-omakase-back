@@ -1,4 +1,4 @@
-package acorn.omakase.service.user.util;
+package acorn.omakase.util;
 
 import acorn.omakase.common.code.ErrorCode;
 import acorn.omakase.common.exception.CustomIllegalStateException;

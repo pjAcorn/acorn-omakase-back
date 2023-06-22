@@ -4,9 +4,9 @@ import acorn.omakase.common.code.ErrorCode;
 import acorn.omakase.common.exception.CustomIllegalStateException;
 import acorn.omakase.domain.user.User;
 import acorn.omakase.dto.userdto.*;
-import acorn.omakase.repository.UserMapper;
-import acorn.omakase.service.user.util.RedisUtil;
-import acorn.omakase.service.user.util.SecurityUtil;
+import acorn.omakase.repository.UserRepository;
+import acorn.omakase.util.RedisUtil;
+import acorn.omakase.util.SecurityUtil;
 import acorn.omakase.token.TokenProvider;
 import acorn.omakase.token.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class UserService {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisUtil redisUtil;
-    private final UserMapper userMapper;
+    private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
     private final TokenProvider tokenProvider;
 
@@ -39,7 +39,7 @@ public class UserService {
         User user = User.of(signupRequest);
 
         user.encodingPassword(encoder.encode(user.getPassword()));
-        userMapper.signup(user);
+        userRepository.signup(user);
     }
 
     // 아이디 찾기
@@ -52,7 +52,7 @@ public class UserService {
             throw new CustomIllegalStateException(ErrorCode.INVALID_NUMBER);
         }
 
-        return Optional.ofNullable(userMapper.findId(email))
+        return Optional.ofNullable(userRepository.findId(email))
                 .orElseThrow(() -> new CustomIllegalStateException(ErrorCode.NOT_FOUND_USER));
     }
 
@@ -65,7 +65,7 @@ public class UserService {
             throw new CustomIllegalStateException(ErrorCode.INVALID_TOKEN);
         }
 
-        int pwChk = userMapper.findPw(findPwRequest);
+        int pwChk = userRepository.findPw(findPwRequest);
 
         if (!(pwChk > 0)) {
             throw new CustomIllegalStateException(ErrorCode.NOT_FOUND_USER);
@@ -92,7 +92,7 @@ public class UserService {
     }
 
     public User findById(Long userId) {
-        return userMapper.findById(userId);
+        return userRepository.findById(userId);
     }
 
     // 로그아웃
@@ -125,14 +125,14 @@ public class UserService {
 
         Long userId = deleteUser.getUserId();
         // 회원 암호 가져오기
-        String password = userMapper.getPw(userId);
+        String password = userRepository.getPw(userId);
         // 첫번째 입력
         String password1 = deleteIdRequest.getPassword1();
         // 두번째 입력
         String password2 = deleteIdRequest.getPassword2();
         if (password1.equals(password2)) {
             if (password1.equals(password)) {
-                userMapper.deleteId(userId);
+                userRepository.deleteId(userId);
             } else {
                 throw new CustomIllegalStateException(ErrorCode.NO_MATCHES_PASSWORD);
             }
@@ -144,7 +144,7 @@ public class UserService {
     // 아이디 중복 확인
     public void idChk(IdChkRequest idChkRequest) {
 
-        int check = userMapper.idChk(idChkRequest);
+        int check = userRepository.idChk(idChkRequest);
 
         if (check > 0) {
             throw new CustomIllegalStateException(ErrorCode.DUPLICATE_LOGIN_ID);
@@ -161,7 +161,7 @@ public class UserService {
         }
 
         resetPwRequest.encodingPassword(encoder.encode(resetPwRequest.getPw1()));
-        userMapper.resetPw(resetPwRequest);
+        userRepository.resetPw(resetPwRequest);
     }
 
     @SneakyThrows
@@ -196,7 +196,7 @@ public class UserService {
     }
 
     public void emailChk(EmailChkRequest emailChkRequest) {
-        int emailChk = userMapper.emailChk(emailChkRequest);
+        int emailChk = userRepository.emailChk(emailChkRequest);
         if (emailChk > 0) {
             throw new CustomIllegalStateException(ErrorCode.DUPLICATE_EMAIL);
         }
@@ -207,7 +207,7 @@ public class UserService {
         if(!LoginUserId.equals(userId)){
             throw new CustomIllegalStateException(ErrorCode.NO_MATCHES_LOGIN_ID);
         }
-        MyPageResponse myPage = userMapper.myPage(LoginUserId);
+        MyPageResponse myPage = userRepository.myPage(LoginUserId);
         return myPage;
     }
 
@@ -219,6 +219,6 @@ public class UserService {
         }
         updateProfileRequest.setUserId(LoginUserId);
 
-        userMapper.update(updateProfileRequest);
+        userRepository.update(updateProfileRequest);
     }
 }
