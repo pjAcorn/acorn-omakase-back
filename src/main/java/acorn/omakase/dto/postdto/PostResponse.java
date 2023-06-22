@@ -16,8 +16,9 @@ public class PostResponse {
     private Long postId;
     private String title;
     private String content;
-    private Timestamp createdAt;
+    private String createdAt;
     private String category;
     private String nickname;
-
+    private long viewCount;
+    private long likeCount;
 }

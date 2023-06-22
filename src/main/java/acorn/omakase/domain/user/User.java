@@ -6,13 +6,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 
-@Getter
+@Entity @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "USER")
 public class User {
 
+    @Id
+    @GeneratedValue
+    @Column(name = "user_id")
     private Long userId;
     private String loginId;
     private String name;

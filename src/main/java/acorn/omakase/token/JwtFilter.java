@@ -1,6 +1,6 @@
 package acorn.omakase.token;
 
-import acorn.omakase.service.user.RedisUtil;
+import acorn.omakase.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -36,25 +36,29 @@ public class JwtFilter extends OncePerRequestFilter {
         String access = resolveToken(request);
 
         log.info("jwt={}", access);
+        log.info((request).getRequestURL().toString());
 
         // 2. validateToken 으로 토큰 유효성 검사
         // 정상 토큰이면 해당 토큰으로 Authentication 을 가져와서 SecurityContext 에 저장
         if (StringUtils.hasText(access) && tokenProvider.validateToken(access)) {
             String blockLogout = redisUtil.getData(access);
+            log.info("blocklogout={}",blockLogout);
             if (!"logout".equals(blockLogout)) {
                 Authentication authentication = tokenProvider.getAuthentication(access);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+            }else{
+                log.info("띵동");
             }
+        }else{
+            log.info("띵동2");
         }
-
         filterChain.doFilter(request, response);
     }
-
 
     // Request Header 에서 토큰 정보를 꺼내오기
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-
+        log.info("bearerToken={}", bearerToken);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(7);
         }

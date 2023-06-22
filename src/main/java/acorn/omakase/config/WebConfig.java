@@ -11,7 +11,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000", "http://localhost:3001", "http://localhost:3002",
-                        "http://localhost:8000", "http://api.localhost:8080/", "http://api.localhost:8000/")
+                        "http://localhost:8000", "http://api.localhost:8080/", "http://api.localhost:8000/",
+                        "http://omakase-s3.s3-website.ap-northeast-2.amazonaws.com")
                 .allowedMethods("GET", "POST", "PATCH", "DELETE")
                 .allowedHeaders("Access-Control-Allow-Origin",
                         "*",

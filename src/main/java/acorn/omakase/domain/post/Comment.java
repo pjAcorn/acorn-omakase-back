@@ -1,4 +1,4 @@
-package acorn.omakase.domain;
+package acorn.omakase.domain.post;
 
 import lombok.*;
 
@@ -8,7 +8,7 @@ import java.sql.Date;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment {
     private Long commentId;
-    private String content;
+    private String commentContent;
     private Long likeCount;
     private Date createdAt;
     private Long userId;
@@ -16,9 +16,9 @@ public class Comment {
     private Date updatedAt;
 
     @Builder
-    public Comment(Long commentId, String content, Long likeCount, Date createdAt, Long userId, Long postId, Date updatedAt) {
+    public Comment(Long commentId, String commentContent, Long likeCount, Date createdAt, Long userId, Long postId, Date updatedAt) {
         this.commentId = commentId;
-        this.content = content;
+        this.commentContent = commentContent;
         this.likeCount = likeCount;
         this.createdAt = createdAt;
         this.userId = userId;
@@ -26,17 +26,17 @@ public class Comment {
         this.updatedAt = updatedAt;
     }
 
-    public static Comment ofNew(String content, Long userId, Long postId) {
+    public static Comment ofNew(String commentContent, Long userId, Long postId) {
         return Comment.builder()
-                .content(content)
+                .commentContent(commentContent)
                 .userId(userId)
                 .postId(postId).build();
     }
 
-    public static Comment ofMod(Long commentId, String content) {
+    public static Comment ofMod(Long commentId, String commentContent) {
         return Comment.builder()
                 .commentId(commentId)
-                .content(content).build();
+                .commentContent(commentContent).build();
     }
     
 }

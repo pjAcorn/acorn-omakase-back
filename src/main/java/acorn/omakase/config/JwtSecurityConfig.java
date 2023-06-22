@@ -1,6 +1,6 @@
 package acorn.omakase.config;
 
-import acorn.omakase.service.user.RedisUtil;
+import acorn.omakase.util.RedisUtil;
 import acorn.omakase.token.JwtFilter;
 import acorn.omakase.token.TokenProvider;
 import lombok.RequiredArgsConstructor;

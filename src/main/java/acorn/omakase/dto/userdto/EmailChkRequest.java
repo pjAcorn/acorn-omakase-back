@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FindIdRequest {
-        private String email;
-        private String code;
+public class EmailChkRequest {
+    private String email;
 }

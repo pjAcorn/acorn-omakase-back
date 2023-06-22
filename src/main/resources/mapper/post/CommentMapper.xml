@@ -1,33 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="acorn.omakase.repository.CommentMapper">
+<mapper namespace="acorn.omakase.repository.CommentRepository">
 
     <!-- 새 댓글 쓰기 -->
-    <insert id="insertComment" parameterType="acorn.omakase.domain.Comment" useGeneratedKeys="true"
+    <insert id="insertComment" parameterType="acorn.omakase.domain.post.Comment" useGeneratedKeys="true"
             keyProperty="commentId" keyColumn="comment_id">
-        insert into omakase.comment(content, user_id, post_id) values(#{content}, #{userId}, #{postId})
+        insert into omakase.COMMENT(comment_content, user_id, post_id, like_count)
+        values(#{commentContent}, #{userId}, #{postId}, 0)
+
     </insert>
 
     <!-- 댓글 수정 -->
-    <update id="updateComment" parameterType="acorn.omakase.domain.Comment">
-        update omakase.comment set content = #{content}, updated_at = now() where comment_id = #{commentId}
+    <update id="updateComment" parameterType="acorn.omakase.domain.post.Comment">
+        update omakase.COMMENT set comment_content = #{commentContent}, updated_at = now() where comment_id = #{commentId}
+
     </update>
 
     <!-- 댓글 삭제 -->
     <delete id="deleteComment" parameterType="long">
-        delete from omakase.comment where comment_id = #{commentId}
+        delete from omakase.COMMENT where comment_id = #{commentId}
     </delete>
 
     <!-- 댓글 좋아요 -->
     <update id="updateLikeComment" parameterType="long">
-        update omakase.comment set like_count = like_count + 1 where comment_id = #{commentId}
+        update omakase.COMMENT set like_count = like_count + 1 where comment_id = #{commentId}
     </update>
 
     <!-- 댓글 리스트 -->
     <select id="selectCommentList" resultType="map" parameterType="long">
-        select c.comment_id, c.content, u.nickname, c.created_at, c.updated_at, c.like_count
-        from omakase.comment c
-        join user u
+        select c.comment_id, c.comment_content, u.nickname, DATE_FORMAT(c.created_at, '%Y-%m-%d %H:%i:%s') as created_at, DATE_FORMAT(c.updated_at, '%Y-%m-%d %H:%i:%s') as updated_at, c.like_count
+        from omakase.COMMENT c
+        join USER u
         on c.user_id = u.user_id
         where post_id = #{postId}
         order by created_at asc
