@@ -86,7 +86,7 @@ public class UserService {
 
         redisUtil.setDataExpire(authenticate.getName(), tokenResponse.getRefreshToken(), 60 * 60 * 24 * 7);
 
-        LoginResponse loginResponse = new LoginResponse(user.getUserId(), user.getNickname(), tokenResponse);
+        LoginResponse loginResponse = new LoginResponse(user.getId(), user.getNickname(), tokenResponse);
 
         return loginResponse;
     }

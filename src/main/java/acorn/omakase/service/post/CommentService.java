@@ -28,7 +28,7 @@ public class CommentService {
         String strUserId = authentication.getName();
         Long userId = Long.parseLong(strUserId);
 
-        Comment saveComment = Comment.ofNew(
+        Comment saveComment = Comment.of(
                 newCommentRequest.getCommentContent(), userId, newCommentRequest.getPostId());
 
         commentRepository.insertComment(saveComment);

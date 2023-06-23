@@ -16,18 +16,20 @@ public class User {
     @Id
     @GeneratedValue
     @Column(name = "user_id")
-    private Long userId;
+    private Long id;
     private String loginId;
     private String name;
     private String password;
     private String email;
     private String region;
     private String nickname;
-//    private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Builder
-    public User(Long userId, String loginId, String name, String password, String email, String region, String nickname) {
-        this.userId = userId;
+    public User(Long id, String loginId, String name, String password, String email, String region, String nickname) {
+        this.id = id;
         this.loginId = loginId;
         this.name = name;
         this.password = password;
@@ -37,8 +39,6 @@ public class User {
         this.role = Role.ROLE_USER;
     }
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
 
     public static User of(SignupRequest signupRequest) {
         return User.builder()
