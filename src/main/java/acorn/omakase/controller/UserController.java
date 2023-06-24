@@ -61,8 +61,10 @@ public class UserController {
 
     // 회원탈퇴
     @PostMapping("/delete")
-    public ResponseEntity delete(@RequestBody DeleteIdRequest deleteIdRequest){
-        userService.delete(deleteIdRequest);
+    public ResponseEntity delete(@RequestBody DeleteIdRequest deleteIdRequest,
+                                 @RequestHeader (value = "Authorization") String acTokenRequest){
+
+        userService.delete(deleteIdRequest, acTokenRequest);
         return new ResponseEntity(new ApiResponse(SuccessCode.DELETE_USER),HttpStatus.OK);
     }
 

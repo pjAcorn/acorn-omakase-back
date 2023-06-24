@@ -19,8 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -39,7 +37,7 @@ public class UserService {
         User user = User.of(signupRequest);
 
         user.encodingPassword(encoder.encode(user.getPassword()));
-        userRepository.signup(user);
+        userRepository.save(user);
     }
 
     // 아이디 찾기
@@ -52,8 +50,11 @@ public class UserService {
             throw new CustomIllegalStateException(ErrorCode.INVALID_NUMBER);
         }
 
-        return Optional.ofNullable(userRepository.findId(email))
+        User user = userRepository.finByEmail(email)
                 .orElseThrow(() -> new CustomIllegalStateException(ErrorCode.NOT_FOUND_USER));
+        String loginId = user.getLoginId();
+
+        return loginId;
     }
 
     // 비밀번호 찾기
@@ -65,11 +66,8 @@ public class UserService {
             throw new CustomIllegalStateException(ErrorCode.INVALID_TOKEN);
         }
 
-        int pwChk = userRepository.findPw(findPwRequest);
-
-        if (!(pwChk > 0)) {
-            throw new CustomIllegalStateException(ErrorCode.NOT_FOUND_USER);
-        }
+        userRepository.finByEmail(email)
+                .orElseThrow(() -> new CustomIllegalStateException(ErrorCode.NOT_FOUND_USER));
     }
 
 
@@ -92,7 +90,9 @@ public class UserService {
     }
 
     public User findById(Long userId) {
-        return userRepository.findById(userId);
+
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new CustomIllegalStateException(ErrorCode.NOT_FOUND_USER));
     }
 
     // 로그아웃
@@ -120,25 +120,18 @@ public class UserService {
     }
 
     // 회원 탈퇴
-    public void delete(DeleteIdRequest deleteIdRequest) {
-        DeleteIdRequest deleteUser = deleteIdRequest;
-
-        Long userId = deleteUser.getUserId();
-        // 회원 암호 가져오기
-        String password = userRepository.getPw(userId);
-        // 첫번째 입력
-        String password1 = deleteIdRequest.getPassword1();
-        // 두번째 입력
-        String password2 = deleteIdRequest.getPassword2();
-        if (password1.equals(password2)) {
-            if (password1.equals(password)) {
-                userRepository.deleteId(userId);
-            } else {
-                throw new CustomIllegalStateException(ErrorCode.NO_MATCHES_PASSWORD);
-            }
-        } else {
-            throw new CustomIllegalStateException(ErrorCode.NO_MATCHES_PASSWORD2);
+    @SneakyThrows
+    public void delete(DeleteIdRequest deleteIdRequest, String acTokenRequest) {
+        if (!deleteIdRequest.getPassword().equals(deleteIdRequest.getPasswordCheck())) {
+            throw new CustomIllegalStateException(ErrorCode.NO_MATCHES_PASSWORD);
         }
+
+        String accessToken = acTokenRequest.substring(7);
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+        String strUserId = authentication.getName();
+        Long userId = Long.parseLong(strUserId);
+
+        userRepository.deleteById(userId);
     }
 
     // 아이디 중복 확인
