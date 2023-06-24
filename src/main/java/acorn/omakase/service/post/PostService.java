@@ -28,7 +28,7 @@ public class PostService {
         String strUserId = authentication.getName();
         Long userId = Long.parseLong(strUserId);
 
-        Post savePost = Post.ofNew(
+        Post savePost = Post.of(
                 newPostRequest.getTitle(), newPostRequest.getContent(), userId, newPostRequest.getCategory());
         postRepository.insertPost(savePost);
     }

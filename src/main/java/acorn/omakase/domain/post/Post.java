@@ -1,47 +1,67 @@
 package acorn.omakase.domain.post;
 
+import acorn.omakase.domain.user.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.sql.Date;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Getter
+@Getter @Entity
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "POST")
 public class Post {
-    private Long postId;
-    private Long userId;
+
+    @Id
+    @GeneratedValue
+    @Column(name = "post_id")
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments = new ArrayList<>();
+
     private String title;
     private String content;
     private Long viewCount;
-    private Date createdAt;
     private String category;
 
+    @CreatedDate
+    @LastModifiedDate
+    private LocalDateTime createdAt;
+
+
     @Builder
-    public Post(Long postId, String title, String content,Long userId, Date createdAt, String category){
-        this.postId = postId;
+    public Post(Long id, String title, String content, User user, LocalDateTime createdAt, String category){
+        this.id = id;
         this.title = title;
         this.content = content;
-        this.userId = userId;
+        this.user = user;
         this.createdAt = createdAt;
         this.category = category;
     }
 
-    public static Post ofNew(String title, String content, Long userId, String category){
+    public static Post of(String title, String content, User user, String category){
         return Post.builder()
                 .title(title)
                 .content(content)
-                .userId(userId)
+                .user(user)
                 .category(category).build();
     }
 
-    public static Post ofMod(long postId,String title, String content, String category){
-        return Post.builder()
-                .postId(postId)
-                .title(title)
-                .content(content)
-                .category(category).build();
+    public void addViewCount() {
+        this.viewCount++;
     }
 
 

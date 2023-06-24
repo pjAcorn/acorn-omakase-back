@@ -8,10 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeleteIdRequest {
-    private Long userId;
     private String password;
-    private String password1;
-    private String password2;
-
-
+    private String passwordCheck;
 }
